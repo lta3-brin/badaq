@@ -1,0 +1,36 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+template: |
+  ## Selamat Datang di Open Project LTA3 BPPT
+  Perlu melakukan chat dengan kami, masuk ke tautan berikut ini http://bit.ly/ChatBBTA3
+  Apabila berminat gabung dengan _Open Project_ LTA3 BPPT silahkan juga menggunakan layanan chat kami.
+  ## Perubahan yang Dilakukan
+  $CHANGES
+categories:
+  - title: '💣 Perubahan Total'
+    label: 'breaking'
+  - title: '🚀 Hal Baru'
+    label: 'enhancement'
+  - title: '🐛 Koreksi Bug'
+    label: 'bug'
+  - title: '🔨 Perawatan'
+    label: 'maintenance'
+  - title: '📝 Dokumentasi'
+    label: 'documentation'
+  - title: '🔗 Pembaruan Dependency'
+    label: 'dependencies'
+
+version-resolver:
+  major:
+    labels:
+      - 'breaking'
+  minor:
+    labels:
+      - 'enhancement'
+  patch:
+    labels:
+      - 'bug'
+      - 'maintenance'
+      - 'documentation'
+      - 'dependencies'
+      - 'security'
