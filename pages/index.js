@@ -1,9 +1,18 @@
 import Head from "next/head"
-import {Box, Flex, Spacer, Container, SimpleGrid} from "@chakra-ui/react"
-import StatsCard from "../components/statscard"
-// import styles from "../styles/Home.module.css"
+import { IconSun, IconMoonStars } from "@tabler/icons"
+import {
+  Text,
+  Title,
+  Affix,
+  ActionIcon,
+  useMantineColorScheme,
+} from "@mantine/core"
+
 
 export default function Home() {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  const dark = colorScheme === "dark"
+
   return <div>
     <Head>
       <title>AeroDAQ UPM</title>
@@ -11,19 +20,21 @@ export default function Home() {
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <Flex flexDirection="column" color='white' height="100vh">
-      <Spacer />
-        <Container maxW="9xl" py={"10"}>
-          <SimpleGrid columns={{sm: 2, md: 3}} spacing="20px">
-            <StatsCard title={'We serve'} stat={'50,000 people'} />
-            <StatsCard title={'We serve'} stat={'50,000 people'} />
-            <StatsCard title={'We serve'} stat={'50,000 people'} />
-            <StatsCard title={'We serve'} stat={'50,000 people'} />
-            <StatsCard title={'We serve'} stat={'50,000 people'} />
-            <StatsCard title={'We serve'} stat={'50,000 people'} />
-          </SimpleGrid>
-        </Container>
-      <Spacer />
-    </Flex>
+    <Title order={3}>
+      <Text color={dark ? "yellow" : "blue"} inherit component="span">
+        Highlight something in title {colorScheme}.
+      </Text>
+    </Title>
+
+    <Affix position={{ bottom: 20, right: 20 }}>
+      <ActionIcon
+        variant="outline"
+        color={dark ? "yellow" : "blue"}
+        onClick={() => toggleColorScheme()}
+        title="Toggle color scheme"
+      >
+        {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+      </ActionIcon>
+    </Affix>
   </div>
 }
