@@ -1,8 +1,6 @@
 export default {
-  initialColorMode: "system",
-  useSystemColorMode: true,
-  fonts: {
-    body: "Poppins, sans-serif",
-    heading: "Poppins, sans-serif"
-  }
+  colorScheme: "light",
+  fontFamily: "Poppins, sans-serif",
+  fontFamilyMonospace: 'Monaco, Courier, monospace',
+  headings: { fontFamily: "Poppins, sans-serif"}
 }
