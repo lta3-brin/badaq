@@ -35,14 +35,22 @@ export default function AeroDAQ(props) {
           withNormalizeCSS
           theme={DefaultTheme}
         >
-          <AppShell
+          <AppShell padding={0}
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
             styles={{
               main: {
                 background: colorScheme === "dark" ?
-                  theme.colors.dark[8]:
-                  theme.colors.gray[1],
+                  theme.fn.gradient({
+                    from: theme.colors.dark[6],
+                    to: theme.colors.dark[4],
+                    deg: -60
+                  }) :
+                  theme.fn.gradient({
+                    from: theme.colors.gray[6],
+                    to: theme.colors.gray[3],
+                    deg: -60
+                  }),
               },
             }}
           >
