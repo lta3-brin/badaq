@@ -1,12 +1,12 @@
 import Head from "next/head"
 import { IconSun, IconMoonStars } from "@tabler/icons"
 import {
-  Text,
-  Title,
+  Grid,
   Affix,
   ActionIcon,
   useMantineColorScheme,
 } from "@mantine/core"
+import Hero from "../components/hero"
 
 
 export default function Home() {
@@ -20,16 +20,20 @@ export default function Home() {
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <Title order={3}>
-      <Text color={dark ? "yellow" : "blue"} inherit component="span">
-        Highlight something in title {colorScheme}.
-      </Text>
-    </Title>
+    <Grid gutter={0}>
+      <Grid.Col sm={12} md={3} lg={2}>
+        <Hero />
+      </Grid.Col>
+
+      <Grid.Col sm={12} md={9} lg={10}>
+
+      </Grid.Col>
+    </Grid>
 
     <Affix position={{ bottom: 20, right: 20 }}>
       <ActionIcon
         variant="outline"
-        color={dark ? "yellow" : "blue"}
+        color={dark ? "yellow" : "dark"}
         onClick={() => toggleColorScheme()}
         title="Toggle color scheme"
       >
