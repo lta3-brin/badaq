@@ -1,4 +1,4 @@
-# AeroDAQ UPM
+# BADAQ
 
 Repositori pengembangan sistem DAQ external balance dengan load cell untuk Universitas Putra Malaysia.
 
