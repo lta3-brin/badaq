@@ -17,8 +17,10 @@
     "@mantine/notifications": "^5.0.2",
     "@tabler/icons": "^1.78.1",
     "next": "12.2.2",
+    "plotly.js": "^2.14.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
     "eslint": "8.20.0",
