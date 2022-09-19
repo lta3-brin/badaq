@@ -1,4 +1,5 @@
 import Head from "next/head"
+import dynamic from 'next/dynamic'
 import { IconSun, IconMoonStars } from "@tabler/icons"
 import {
   Grid,
@@ -8,6 +9,16 @@ import {
 } from "@mantine/core"
 import Hero from "../components/hero"
 
+const Daplot = dynamic(() =>
+  import(
+    '../components/daplot'
+  ),
+  {
+    ssr: false,
+    loading: () => <>Loading...</>,
+  },
+)
+
 
 export default function Home() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -15,7 +26,7 @@ export default function Home() {
 
   return <div>
     <Head>
-      <title>AeroDAQ UPM</title>
+      <title>BADAQ Monitor</title>
       <meta name="description" content="Aplikasi akuisisi data sensor dengan load cell" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
@@ -26,7 +37,7 @@ export default function Home() {
       </Grid.Col>
 
       <Grid.Col sm={12} md={9} lg={10}>
-
+        <Daplot />
       </Grid.Col>
     </Grid>
 
