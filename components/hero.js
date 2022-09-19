@@ -34,7 +34,7 @@ export default function Hero(props) {
                   component="span"
                   color={dark ? colorDark : colorLight}
                 >
-                  AeroDAQ - Six Component Balances
+                  Six Component Balance
                 </Text><br />
 
                 <Text
@@ -78,7 +78,7 @@ export default function Hero(props) {
                 component="span"
                 color={dark ? colorDark : colorLight}
               >
-                AeroDAQ - Six Component Balancess
+                Six Component Balance
               </Text><br />
 
               <Text
