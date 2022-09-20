@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import {
   Box,
   Text,
   Stack,
+  Modal,
   Button,
   Center,
   MediaQuery,
@@ -17,6 +19,7 @@ export default function Hero(props) {
   const theme = useMantineTheme()
   const colorLight = theme.colors.gray[5]
   const colorDark = theme.colors.yellow[7]
+  const [opened, setOpened] = useState(false)
 
   return <>
     <MediaQuery smallerThan={"md"} styles={{ display: "none" }}>
@@ -55,9 +58,22 @@ export default function Hero(props) {
                 uppercase
                 variant="gradient"
                 gradient={{ from: dark ? "lime" : "indigo", to: dark ? "yellow" : "cyan" }}
+                onClick={() => setOpened(true)}
               >
                 About
               </Button>
+
+              <Modal
+                opened={opened}
+                onClose={() => setOpened(false)}
+                title="📌 About BADAQ"
+              >
+                <Text weight={700} component="span">Balance Data Acquisition and Processing System (BADAQ)</Text> is a six-component balance
+                data acquisition and processing system specially designed for wind tunnel
+                experiment needs. This system accommodates data acquisition and processing
+                for axial force, side force, normal force, lift moment, yaw moment, and
+                rolling moment.
+              </Modal>
             </Center>
           </Stack>
         </BackgroundImage>
