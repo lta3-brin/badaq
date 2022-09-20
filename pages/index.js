@@ -7,11 +7,20 @@ import {
   ActionIcon,
   useMantineColorScheme,
 } from "@mantine/core"
-import Hero from "../components/hero"
 
 const Daplot = dynamic(() =>
   import(
     '../components/daplot'
+  ),
+  {
+    ssr: false,
+    loading: () => <>Loading...</>,
+  },
+)
+
+const Hero = dynamic(() =>
+  import(
+    '../components/hero'
   ),
   {
     ssr: false,
