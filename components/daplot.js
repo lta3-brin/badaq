@@ -65,6 +65,7 @@ export default function Daplot(props) {
         <Plot
             data={[trace1, [], trace2, trace3, trace4, trace5, trace6]}
             layout={{
+                height: 560,
                 paper_bgcolor: dark ? "#25262B" : "#DEE2E6",
                 plot_bgcolor: dark ? "#25262B" : "#DEE2E6",
                 font: {
