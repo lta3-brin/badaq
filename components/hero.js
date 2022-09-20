@@ -53,18 +53,9 @@ export default function Hero(props) {
             </Center>
 
             <Center p={"md"}>
-              <Button
-                fullWidth
-                uppercase
-                variant="gradient"
-                gradient={{ from: dark ? "lime" : "indigo", to: dark ? "yellow" : "cyan" }}
-                onClick={() => setOpened(true)}
-              >
-                About
-              </Button>
-
               <Modal
                 opened={opened}
+                withCloseButton={false}
                 onClose={() => setOpened(false)}
                 title="📌 About BADAQ"
               >
@@ -74,6 +65,15 @@ export default function Hero(props) {
                 for axial force, side force, normal force, lift moment, yaw moment, and
                 rolling moment.
               </Modal>
+              <Button
+                fullWidth
+                uppercase
+                variant="gradient"
+                gradient={{ from: dark ? "lime" : "indigo", to: dark ? "yellow" : "cyan" }}
+                onClick={() => setOpened(true)}
+              >
+                About
+              </Button>
             </Center>
           </Stack>
         </BackgroundImage>
