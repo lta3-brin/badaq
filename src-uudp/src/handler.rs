@@ -1,5 +1,5 @@
-use std::{fmt::format, net::TcpStream};
-
+use std::cell::RefCell;
+use std::net::TcpStream;
 use tungstenite::{Message, WebSocket};
 
 use crate::err::AppErr;
@@ -9,16 +9,33 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
     let mut f = "".to_string();
     let mut coor: Vec<f32> = vec![];
 
-    if msg.contains("EXP") {
-        f.push_str(get_name(msg.clone()).as_str());
-    }
+    get_name(msg.clone(), &mut f);
 
     if msg.contains("CORR1") {
-        coor = get_corr(msg.clone())?;
+        let dt = get_corr(msg.clone())?.trim().to_string();
+
+        for dd in dt.split(" ") {
+            let d = dd.parse::<f32>()?;
+
+            coor.push(d);
+        }
     }
 
+    println!("{}", f);
+
     if msg.contains("DSN") {
-        calc_corr(msg.clone())?;
+        let dt = calc_corr(msg.clone())?;
+        let lbl = "aaz".to_string();
+
+        for (_idx, _line) in dt.split(" ").enumerate() {
+            // println!("{}:{}", idx, line);
+            // let line = line.trim().parse::<f32>()?;
+            // let a = line - coor[idx];
+
+            // lbl.push_str(format!("{},", a).as_str());
+        }
+
+        ws.write_message(Message::Text(lbl)).unwrap();
     }
 
     if msg.contains("ENDSEQ") {
@@ -27,74 +44,63 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
         ws.write_message(Message::Text(lbl)).unwrap();
     }
 
-    ws.write_message(Message::Text(f)).unwrap();
-
     Ok(())
 }
 
-fn get_name(msg: String) -> String {
-    let lines = msg.split("\n");
+fn get_name(msg: String, f: &mut String) {
+    if msg.contains("EXP") {
+        let lines = msg.split("\n");
 
-    let mut f = "".to_string();
-    for line in lines {
-        if line.contains("EXP") {
-            let ln: Vec<&str> = line.split(",").collect();
+        for line in lines {
+            if line.contains("EXP") {
+                let ln: Vec<&str> = line.split(",").collect();
 
-            f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
+                f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
+            }
+
+            if line.contains("RUN") {
+                let ln: Vec<&str> = line.split(",").collect();
+
+                f.push_str(&format!("-RUN{}.csv", ln[1].trim()))
+            }
         }
 
-        if line.contains("RUN") {
-            let ln: Vec<&str> = line.split(",").collect();
-
-            f.push_str(&format!("-RUN{}", ln[1].trim()))
-        }
+        // f.push_str(format!("{f}.csv").as_str());
     }
-
-    format!("{f}.csv")
 }
 
-fn get_corr(msg: String) -> Result<Vec<f32>, AppErr> {
-    let lines = msg.trim().split(",");
-    let mut coors: Vec<f32> = vec![];
+fn get_corr(msg: String) -> Result<String, AppErr> {
+    let mut lines = msg.trim().to_string();
 
-    for (idx, line) in lines.enumerate() {
-        if idx != 0 && idx != 7 {
-            let line = line.trim().parse::<f32>()?;
+    lines = corr_string(&mut lines, 1, false);
 
-            coors.push(line);
-        }
-    }
-
-    Ok(coors)
+    Ok(lines)
 }
 
-fn calc_corr(msg: String) -> Result<Vec<f32>, AppErr> {
+fn calc_corr(msg: String) -> Result<String, AppErr> {
     let mut lines = msg.trim().to_string();
 
     if msg.contains("SEQ") {
-        let mut tmp: Vec<String> = vec![];
-        let lns = lines.replace("\n", "");
-
-        for line in lns.split(",") {
-            let line = line.trim();
-
-            tmp.push(line.trim().to_string())
-        }
-
-        let lnn = &tmp[4..tmp.len() - 1].join(" ");
-
-        lines = format!("{}", lnn);
+        lines = corr_string(&mut lines, 4, true);
     } else {
-        let mut tmp: Vec<String> = vec![];
-
-        for line in lines.split(",") {
-            tmp.push(line.to_string());
-        }
-
-        let lnn = &tmp[2..tmp.len() - 1].join(" ");
-
-        lines = format!("{}", lnn);
+        lines = corr_string(&mut lines, 2, false);
     }
 
-    Ok(vec![])
+    Ok(lines)
+}
+
+fn corr_string(lines: &mut String, start: usize, is_newline: bool) -> String {
+    let mut tmp: Vec<String> = vec![];
+
+    if is_newline {
+        *lines = lines.replace("\n", "");
+    }
+
+    for line in lines.split(",") {
+        tmp.push(line.to_string());
+    }
+
+    let lnn = &tmp[start..tmp.len() - 1].join(" ");
+
+    format!("{}", lnn)
 }
