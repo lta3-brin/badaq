@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use std::net::TcpStream;
 use tungstenite::{Message, WebSocket};
 
@@ -9,7 +8,9 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
     let mut f = "".to_string();
     let mut coor: Vec<f32> = vec![];
 
-    get_name(msg.clone(), &mut f);
+    if msg.contains("EXP") {
+        f.push_str(get_name(msg.clone()).as_str());
+    }
 
     if msg.contains("CORR1") {
         let dt = get_corr(msg.clone())?.trim().to_string();
@@ -20,8 +21,6 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
             coor.push(d);
         }
     }
-
-    println!("{}", f);
 
     if msg.contains("DSN") {
         let dt = calc_corr(msg.clone())?;
@@ -47,26 +46,25 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
     Ok(())
 }
 
-fn get_name(msg: String, f: &mut String) {
-    if msg.contains("EXP") {
-        let lines = msg.split("\n");
+fn get_name(msg: String) -> String {
+    let lines = msg.split("\n");
 
-        for line in lines {
-            if line.contains("EXP") {
-                let ln: Vec<&str> = line.split(",").collect();
+    let mut f = "".to_string();
+    for line in lines {
+        if line.contains("EXP") {
+            let ln: Vec<&str> = line.split(",").collect();
 
-                f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
-            }
-
-            if line.contains("RUN") {
-                let ln: Vec<&str> = line.split(",").collect();
-
-                f.push_str(&format!("-RUN{}.csv", ln[1].trim()))
-            }
+            f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
         }
 
-        // f.push_str(format!("{f}.csv").as_str());
+        if line.contains("RUN") {
+            let ln: Vec<&str> = line.split(",").collect();
+
+            f.push_str(&format!("-RUN{}", ln[1].trim()))
+        }
     }
+
+    format!("{f}.csv")
 }
 
 fn get_corr(msg: String) -> Result<String, AppErr> {
