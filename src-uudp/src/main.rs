@@ -1,11 +1,13 @@
 mod err;
+mod handler;
 
 use std::net::TcpListener;
 use std::net::UdpSocket;
 use std::thread::spawn;
-use tungstenite::{accept, Message};
+use tungstenite::accept;
 
-use err::AppErr;
+use crate::err::AppErr;
+use crate::handler::parse_message;
 
 fn main() -> Result<(), AppErr> {
     let server = TcpListener::bind("127.0.0.1:9001")?;
@@ -24,7 +26,7 @@ fn main() -> Result<(), AppErr> {
                 socket.recv_from(&mut buf).unwrap();
 
                 let msg = String::from_utf8(buf.to_vec()).unwrap();
-                websocket.write_message(Message::Text(msg)).unwrap();
+                parse_message(&mut websocket, msg.clone()).unwrap();
 
                 // Clear the buffer
                 for el in buf.iter_mut() {
