@@ -1,15 +1,17 @@
-use std::net::TcpStream;
+use std::{cell::RefCell, net::TcpStream};
 use tungstenite::{Message, WebSocket};
 
-use crate::err::AppErr;
+use crate::{err::AppErr, model::AppState};
 
-pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), AppErr> {
+pub fn parse_message(
+    ws: &mut WebSocket<TcpStream>,
+    msg: String,
+    st: &RefCell<AppState>,
+) -> Result<(), AppErr> {
     let msg = msg.trim().to_string();
-    let mut f = "".to_string();
-    let mut coor: Vec<f32> = vec![];
 
     if msg.contains("EXP") {
-        f.push_str(get_name(msg.clone()).as_str());
+        st.borrow_mut().nama = get_name(msg.clone());
     }
 
     if msg.contains("CORR1") {
@@ -18,20 +20,19 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
         for dd in dt.split(" ") {
             let d = dd.parse::<f32>()?;
 
-            coor.push(d);
+            st.borrow_mut().koreksi.push(d);
         }
     }
 
     if msg.contains("DSN") {
         let dt = calc_corr(msg.clone())?;
-        let lbl = "aaz".to_string();
+        let mut lbl = "".to_string();
 
-        for (_idx, _line) in dt.split(" ").enumerate() {
-            // println!("{}:{}", idx, line);
-            // let line = line.trim().parse::<f32>()?;
-            // let a = line - coor[idx];
+        for (idx, line) in dt.trim().split(" ").enumerate() {
+            let line = line.trim().parse::<f32>()?;
+            let a = line - st.borrow().koreksi[idx];
 
-            // lbl.push_str(format!("{},", a).as_str());
+            lbl.push_str(format!("{a},").as_str());
         }
 
         ws.write_message(Message::Text(lbl)).unwrap();
@@ -39,6 +40,12 @@ pub fn parse_message(ws: &mut WebSocket<TcpStream>, msg: String) -> Result<(), A
 
     if msg.contains("ENDSEQ") {
         let lbl = "ENDSEQ".to_string();
+
+        ws.write_message(Message::Text(lbl)).unwrap();
+    }
+
+    if msg.contains("ENDRUN") {
+        let lbl = "ENDRUN".to_string();
 
         ws.write_message(Message::Text(lbl)).unwrap();
     }
