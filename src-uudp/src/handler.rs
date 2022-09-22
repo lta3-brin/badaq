@@ -24,6 +24,18 @@ pub fn parse_message(
         }
     }
 
+    if msg.contains("SEQ") {
+        let lines = msg.trim().to_string();
+        let mut tmp: Vec<String> = vec![];
+
+        for line in lines.split(",") {
+            tmp.push(line.trim().to_string());
+        }
+
+        let lbl = format!("{},{}", tmp[0], tmp[1]);
+        ws.write_message(Message::Text(lbl)).unwrap();
+    }
+
     if msg.contains("DSN") {
         let dt = calc_corr(msg.clone())?;
         let mut lbl = "".to_string();
@@ -34,12 +46,6 @@ pub fn parse_message(
 
             lbl.push_str(format!("{a},").as_str());
         }
-
-        ws.write_message(Message::Text(lbl)).unwrap();
-    }
-
-    if msg.contains("ENDSEQ") {
-        let lbl = "ENDSEQ".to_string();
 
         ws.write_message(Message::Text(lbl)).unwrap();
     }
