@@ -1,4 +1,7 @@
-use std::{cell::RefCell, net::TcpStream};
+use std::{
+    net::TcpStream,
+    sync::{Arc, Mutex},
+};
 use tungstenite::{Message, WebSocket};
 
 use crate::{err::AppErr, model::AppState};
@@ -6,12 +9,13 @@ use crate::{err::AppErr, model::AppState};
 pub fn parse_message(
     ws: &mut WebSocket<TcpStream>,
     msg: String,
-    st: &RefCell<AppState>,
+    st: &Arc<Mutex<AppState>>,
 ) -> Result<(), AppErr> {
     let msg = msg.trim().to_string();
+    let mut app_state = st.lock().unwrap();
 
     if msg.contains("EXP") {
-        st.borrow_mut().nama = get_name(msg.clone());
+        app_state.nama = get_name(msg.clone());
     }
 
     if msg.contains("CORR1") {
@@ -20,7 +24,7 @@ pub fn parse_message(
         for dd in dt.split(" ") {
             let d = dd.parse::<f32>()?;
 
-            st.borrow_mut().koreksi.push(d);
+            app_state.koreksi.push(d);
         }
     }
 
@@ -42,7 +46,7 @@ pub fn parse_message(
 
         for (idx, line) in dt.trim().split(" ").enumerate() {
             let line = line.trim().parse::<f32>()?;
-            let a = line - st.borrow().koreksi[idx];
+            let a = line - app_state.koreksi[idx];
 
             lbl.push_str(format!("{a},").as_str());
         }
