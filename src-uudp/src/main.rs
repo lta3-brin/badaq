@@ -2,9 +2,9 @@ mod err;
 mod handler;
 mod model;
 
-use std::cell::RefCell;
 use std::net::TcpListener;
 use std::net::UdpSocket;
+use std::sync::{Arc, Mutex};
 use std::thread::spawn;
 use tungstenite::accept;
 
@@ -18,12 +18,14 @@ fn main() -> Result<(), AppErr> {
 
     println!("Running server...");
 
+    let state = Arc::new(Mutex::new(AppState {
+        nama: "".to_string(),
+        koreksi: vec![],
+    }));
+
     for stream in server.incoming() {
         let socket = socket.try_clone()?;
-        let state = RefCell::new(AppState {
-            nama: "".to_string(),
-            koreksi: vec![],
-        });
+        let state = Arc::clone(&state);
 
         spawn(move || {
             let mut buf = [0; 1024];
