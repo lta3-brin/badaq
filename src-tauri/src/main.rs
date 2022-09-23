@@ -8,10 +8,10 @@ mod handler;
 
 use err::AppErr;
 
-use crate::handler::udp_comm;
+// use crate::handler::udp_comm;
 
 fn main() -> Result<(), AppErr> {
-    udp_comm()?;
+    // udp_comm()?;
 
     tauri::Builder::default()
         .run(tauri::generate_context!())
