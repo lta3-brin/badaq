@@ -21,7 +21,7 @@ pub fn parse_message(
     if msg.contains("CORR1") {
         let dt = get_corr(msg.clone())?.trim().to_string();
 
-        for dd in dt.split(" ") {
+        for dd in dt.trim().split(" ") {
             let d = dd.parse::<f32>()?;
 
             app_state.koreksi.push(d);
