@@ -1,6 +1,8 @@
 import { defineComponent , onMounted} from "vue"
 import {Chart, registerables} from "chart.js"
 
+import { useForceStore } from "src/stores/force"
+
 export default defineComponent({
   name: 'DaPlotComponent',
   props: {
@@ -8,25 +10,25 @@ export default defineComponent({
     title: {type: String, required: true},
   },
   setup(props) {
+    const store = useForceStore()
+
     onMounted(() => {
       Chart.register(...registerables)
 
+      const datasets = []
+
+      for (const key in store[`k${props.id}`]) {
+        datasets.push({
+          label: key,
+          backgroundColor: 'black',
+          borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+          data: store[`k${props.id}`][key],
+        })
+      }
+
       const data = {
-        labels: [...Array(7).keys()],
-        datasets: [
-          {
-            label: 'SEQ1',
-            backgroundColor: 'black',
-            borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-            data: [0, 10, 5, 2, 20, 30, 45],
-          },
-          {
-            label: 'SEQ2',
-            backgroundColor: 'black',
-            borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-            data: [0, 70, 25, 21, 80, 15, 5],
-          }
-        ]
+        labels: [...Array(store[`k${props.id}`]['SEQ1'].length).keys()],
+        datasets
       }
 
       const config = {
@@ -42,10 +44,11 @@ export default defineComponent({
       const myChart = new Chart(
         document.getElementById(`k${props.id}`),
         config
-      );
+      )
     })
 
     return {
+      store
     }
   }
 })
