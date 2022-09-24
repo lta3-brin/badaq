@@ -11,6 +11,7 @@ import { title } from 'process';
 
       <q-card-section>
         <canvas :id="`k${id}`"></canvas>
+        <span v-if="!isVisible">Not enough data</span>
       </q-card-section>
     </q-card>
   </div>
