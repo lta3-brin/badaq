@@ -1,6 +1,6 @@
 use std::{
     net::TcpStream,
-    sync::{Arc, Mutex},
+    sync::{Arc, Mutex, MutexGuard},
 };
 use tungstenite::{Message, WebSocket};
 
@@ -19,48 +19,62 @@ pub fn parse_message(
     }
 
     if msg.contains("CORR1") {
-        let dt = get_corr(msg.clone())?.trim().to_string();
+        let mut lines = msg.clone().trim().to_string();
+        let mut tmp = vec![];
 
-        for dd in dt.trim().split(" ") {
+        lines = corr_string(&mut app_state, &mut lines, false).trim().to_string();
+
+        for dd in lines.trim().split(",") {
+            tmp.push(dd)
+        }
+
+        tmp.pop();
+
+        for dd in tmp {
             let d = dd.parse::<f32>()?;
-
             app_state.koreksi.push(d);
         }
     }
 
-    if msg.contains("SEQ") {
-        let lines = msg.trim().to_string();
-        let mut tmp: Vec<String> = vec![];
-
-        for line in lines.split(",") {
-            tmp.push(line.trim().to_string());
-        }
-
-        let lbl = format!("{},{}", tmp[0], tmp[1]);
-        ws.write_message(Message::Text(lbl)).unwrap();
-    }
-
     if msg.contains("DSN") {
-        let dt = calc_corr(msg.clone())?;
-        let mut lbl = vec![];
+        let mut lines = msg.clone().trim().to_string();
+        let mut tmp = vec![];
 
-        for (idx, line) in dt.trim().split(" ").enumerate() {
-            let line = line.trim().parse::<f32>()?;
-            let a = line - app_state.koreksi[idx];
+        if msg.contains("SEQ") {
+            lines = corr_string(&mut app_state, &mut lines, true);
 
-            lbl.push(a);
+            for line in lines.trim().split(",") {
+                tmp.push(line.trim());
+            }
+        } else {
+            let lbl = &app_state.seq.to_owned();
+
+            lines = format!("{},{}", lbl, corr_string(&mut app_state, &mut lines, false));
+
+            for line in lines.trim().split(",") {
+                tmp.push(line.trim());
+            }
         }
 
-        let k1 = 1481.48482578329 * lbl[0] + 2474.88899479221 * lbl[1] + 49.1840375906808 * lbl[2] - 0.0511660757922492 * lbl[3] - 0.115345955315131 * lbl[4] + 0.00422783876641308 * lbl[5];
-        let k2 = 16.4352534976702 * lbl[0] + 26.9975537262353 * lbl[1] - 0.021689888082859 * lbl[2] + 3.29520163582838 * lbl[3] + 9.87647639575807 * lbl[4] + 0.0452086818621841 * lbl[5];
-        let k3 = 700.96720273151 * lbl[0] - 593.068144510914 * lbl[1] - 11.7924782744019 * lbl[2] - 1.33147879149042 * lbl[3] - 3.96182250409738 * lbl[4] - 0.0123280913871845 * lbl[5];
-        let k4 = -90.3481683057332 * lbl[0] - 111.881088810194 * lbl[1] - 1.83966205205915 * lbl[2] - 0.030205770481682 * lbl[3] - 0.0296322284753154 * lbl[4] + 1.00985294186794 * lbl[5];
-        let k5 = -4.3158405735096 * lbl[0] + 4.19570408253097 * lbl[1] - 0.175423910741572 * lbl[2] + 1.26471001928057 * lbl[3] - 3.80397612831038 * lbl[4] - 0.0080627365900235 * lbl[5];
-        let k6 = 0.686460938560072 * lbl[0] + 1029.31912478392 * lbl[1] - 20.6554471572674 * lbl[2] + 0.00420047631039713 * lbl[3] - 0.00443423766009805 * lbl[4] - 0.463697212185334 * lbl[5];
+        tmp.pop();
+
+        let r1 = tmp[2].trim().parse::<f32>()? - app_state.koreksi[0];
+        let r2 = tmp[3].trim().parse::<f32>()? - app_state.koreksi[1];
+        let r3 = tmp[4].trim().parse::<f32>()? - app_state.koreksi[2];
+        let r4 = tmp[5].trim().parse::<f32>()? - app_state.koreksi[3];
+        let r5 = tmp[6].trim().parse::<f32>()? - app_state.koreksi[4];
+        let r6 = tmp[7].trim().parse::<f32>()? - app_state.koreksi[5];
+
+        let k1 = 1481.48482578329 * r1 + 2474.88899479221 * r2 + 49.1840375906808 * r3 - 0.0511660757922492 * r4 - 0.115345955315131 * r5 + 0.00422783876641308 * r6;
+        let k2 = 16.4352534976702 * r1 + 26.9975537262353 * r2 - 0.021689888082859 * r3 + 3.29520163582838 * r4 + 9.87647639575807 * r5 + 0.0452086818621841 * r6;
+        let k3 = 700.96720273151 * r1 - 593.068144510914 * r2 - 11.7924782744019 * r3 - 1.33147879149042 * r4 - 3.96182250409738 * r5 - 0.0123280913871845 * r6;
+        let k4 = -90.3481683057332 * r1 - 111.881088810194 * r2 - 1.83966205205915 * r3 - 0.030205770481682 * r4 - 0.0296322284753154 * r5 + 1.00985294186794 * r6;
+        let k5 = -4.3158405735096 * r1 + 4.19570408253097 * r2 - 0.175423910741572 * r3 + 1.26471001928057 * r4 - 3.80397612831038 * r5 - 0.0080627365900235 * r6;
+        let k6 = 0.686460938560072 * r1 + 1029.31912478392 * r2 - 20.6554471572674 * r3 + 0.00420047631039713 * r4 - 0.00443423766009805 * r5 - 0.463697212185334 * r6;
 
         ws.write_message(
             Message::Text(
-                format!("{k1},{k2},{k3},{k4},{k5},{k6}")
+                format!("{},{},{},{},{},{},{},{}", tmp[0], tmp[1], k1, k2, k3, k4, k5, k6)
             )
         ).unwrap();
     }
@@ -95,27 +109,7 @@ fn get_name(msg: String) -> String {
     format!("{f}.csv")
 }
 
-fn get_corr(msg: String) -> Result<String, AppErr> {
-    let mut lines = msg.trim().to_string();
-
-    lines = corr_string(&mut lines, 1, false);
-
-    Ok(lines)
-}
-
-fn calc_corr(msg: String) -> Result<String, AppErr> {
-    let mut lines = msg.trim().to_string();
-
-    if msg.contains("SEQ") {
-        lines = corr_string(&mut lines, 4, true);
-    } else {
-        lines = corr_string(&mut lines, 2, false);
-    }
-
-    Ok(lines)
-}
-
-fn corr_string(lines: &mut String, start: usize, is_newline: bool) -> String {
+fn corr_string(st: &mut MutexGuard<AppState>, lines: &mut String, is_newline: bool) -> String {
     let mut tmp: Vec<String> = vec![];
 
     if is_newline {
@@ -123,10 +117,19 @@ fn corr_string(lines: &mut String, start: usize, is_newline: bool) -> String {
     }
 
     for line in lines.split(",") {
-        tmp.push(line.to_string());
+        tmp.push(line.trim().to_string());
     }
 
-    let lnn = &tmp[start..tmp.len() - 1].join(" ");
+    if tmp[0] == "SEQ" {
+        st.seq = format!("{},{}", tmp[0], tmp[1]);
+        tmp.remove(2);
+        tmp.remove(2);
+    } else if tmp[0] == "DSN" {
+        tmp.remove(0);
+        tmp.remove(0);
+    } else if tmp[0] == "CORR1" {
+        tmp.remove(0);
+    }
 
-    format!("{}", lnn)
+    tmp.join(",")
 }
