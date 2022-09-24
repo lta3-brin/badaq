@@ -8,7 +8,6 @@ export default defineComponent({
     DaPlot
   },
   setup() {
-    console.log('IndexPages')
     return {}
   }
 })
