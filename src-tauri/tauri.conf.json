@@ -1,9 +1,9 @@
 {
   "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "quasar build",
+    "beforeDevCommand": "quasar dev",
     "devPath": "http://localhost:9000/",
-    "distDir": "../src-ui/dist"
+    "distDir": "../dist"
   },
   "package": {
     "productName": "aerodaq-upm",
