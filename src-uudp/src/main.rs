@@ -21,6 +21,7 @@ fn main() -> Result<(), AppErr> {
     let state = Arc::new(Mutex::new(AppState {
         nama: "".to_string(),
         koreksi: vec![],
+        seq: "".to_string()
     }));
 
     for stream in server.incoming() {
