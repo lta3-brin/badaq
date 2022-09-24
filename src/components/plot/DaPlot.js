@@ -1,4 +1,4 @@
-import { defineComponent , onMounted} from "vue"
+import { defineComponent , onMounted, ref} from "vue"
 import {Chart, registerables} from "chart.js"
 
 import { useForceStore } from "src/stores/force"
@@ -11,44 +11,53 @@ export default defineComponent({
   },
   setup(props) {
     const store = useForceStore()
+    const isVisible = ref(false)
 
     onMounted(() => {
       Chart.register(...registerables)
 
       const datasets = []
+      const obj = store[`k${props.id}`]
 
-      for (const key in store[`k${props.id}`]) {
-        datasets.push({
-          label: key,
-          backgroundColor: 'black',
-          borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-          data: store[`k${props.id}`][key],
-        })
-      }
+      if (Object.keys(obj).length === 0 && obj.constructor === Object) {
+        isVisible.value = false
+      } else {
+        isVisible.value = true
 
-      const data = {
-        labels: [...Array(store[`k${props.id}`]['SEQ1'].length).keys()],
-        datasets
-      }
-
-      const config = {
-        type: 'line',
-        data: data,
-        options: {
-          layout: {
-              padding: 0
+        for (const key in obj) {
+          datasets.push({
+            label: key,
+            backgroundColor: 'black',
+            borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+            data: obj[key],
+          })
+        }
+  
+        const data = {
+          labels: [...Array(Object.values(obj)[0].length).keys()],
+          datasets
+        }
+  
+        const config = {
+          type: 'line',
+          data: data,
+          options: {
+            layout: {
+                padding: 0
+            }
           }
         }
+  
+        store.chart = new Chart(
+          document.getElementById(`k${props.id}`),
+          config
+        )
       }
-
-      const myChart = new Chart(
-        document.getElementById(`k${props.id}`),
-        config
-      )
     })
 
     return {
-      store
+      store,
+      isVisible
     }
   }
 })
