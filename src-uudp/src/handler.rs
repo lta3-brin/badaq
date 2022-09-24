@@ -79,6 +79,12 @@ pub fn parse_message(
         ).unwrap();
     }
 
+    if msg.contains("ENDSEQ,") {
+        let lbl = "ENDSEQ".to_string();
+
+        ws.write_message(Message::Text(lbl)).unwrap();
+    }
+
     if msg.contains("ENDRUN") {
         let lbl = "ENDRUN".to_string();
 
