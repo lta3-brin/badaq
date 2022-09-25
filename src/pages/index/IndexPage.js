@@ -16,7 +16,67 @@ export default defineComponent({
       responsive: true
     }
 
-    const chartData = ref({
+    const chartData1 = ref({
+      labels: [],
+      datasets: [
+        {
+          label: `SEQ${store.sec}`,
+          data: [],
+          backgroundColor: 'rgb(83, 52, 131)',
+          borderColor: 'rgb(233, 69, 96)'
+        }
+      ]
+    })
+
+    const chartData2 = ref({
+      labels: [],
+      datasets: [
+        {
+          label: `SEQ${store.sec}`,
+          data: [],
+          backgroundColor: 'rgb(83, 52, 131)',
+          borderColor: 'rgb(233, 69, 96)'
+        }
+      ]
+    })
+
+    const chartData3 = ref({
+      labels: [],
+      datasets: [
+        {
+          label: `SEQ${store.sec}`,
+          data: [],
+          backgroundColor: 'rgb(83, 52, 131)',
+          borderColor: 'rgb(233, 69, 96)'
+        }
+      ]
+    })
+
+    const chartData4 = ref({
+      labels: [],
+      datasets: [
+        {
+          label: `SEQ${store.sec}`,
+          data: [],
+          backgroundColor: 'rgb(83, 52, 131)',
+          borderColor: 'rgb(233, 69, 96)'
+        }
+      ]
+    })
+
+    const chartData5 = ref({
+      labels: [],
+      datasets: [
+        {
+          label: `SEQ${store.sec}`,
+          data: [],
+          backgroundColor: 'rgb(83, 52, 131)',
+          borderColor: 'rgb(233, 69, 96)'
+        }
+      ]
+    })
+
+    const chartData6 = ref({
       labels: [],
       datasets: [
         {
@@ -43,7 +103,42 @@ export default defineComponent({
           store.p5 = []
           store.p6 = []
 
-          chartData.value.datasets.push({
+          chartData1.value.datasets.push({
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          })
+
+          chartData2.value.datasets.push({
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          })
+
+          chartData3.value.datasets.push({
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          })
+
+          chartData4.value.datasets.push({
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          })
+
+          chartData5.value.datasets.push({
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          })
+
+          chartData6.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
@@ -59,14 +154,34 @@ export default defineComponent({
           store.p5.push(parseFloat(data[8]))
           store.p6.push(parseFloat(data[9]))
 
-          chartData.value.labels = store.lbl
-          chartData.value.datasets[parseInt(data[1]) - 1].data = store.p1
+          chartData1.value.labels = store.lbl
+          chartData1.value.datasets[parseInt(data[1]) - 1].data = store.p1
+
+          chartData2.value.labels = store.lbl
+          chartData2.value.datasets[parseInt(data[1]) - 1].data = store.p2
+
+          chartData3.value.labels = store.lbl
+          chartData3.value.datasets[parseInt(data[1]) - 1].data = store.p3
+
+          chartData4.value.labels = store.lbl
+          chartData4.value.datasets[parseInt(data[1]) - 1].data = store.p4
+
+          chartData5.value.labels = store.lbl
+          chartData5.value.datasets[parseInt(data[1]) - 1].data = store.p5
+
+          chartData6.value.labels = store.lbl
+          chartData6.value.datasets[parseInt(data[1]) - 1].data = store.p6
         }
       }
     })
 
     return {
-      chartData,
+      chartData1,
+      chartData2,
+      chartData3,
+      chartData4,
+      chartData5,
+      chartData6,
       chartOptions
     }
   }
