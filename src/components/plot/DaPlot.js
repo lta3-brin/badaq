@@ -15,10 +15,6 @@ export default defineComponent({
       type: String,
       default: 'k1'
     },
-    datasetIdKey: {
-      type: String,
-      default: 'label'
-    }
   },
   setup(props) {
     const store = useForceStore()

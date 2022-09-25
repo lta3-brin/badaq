@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, computed, ref } from 'vue'
 import Chart from 'chart.js/auto'
 import { Line } from 'vue-chartjs'
 
@@ -20,7 +20,7 @@ export default defineComponent({
       labels: [],
       datasets: [
         {
-          label: `SEQ01`,
+          label: `SEQ${store.sec}`,
           data: [],
           backgroundColor: 'rgb(83, 52, 131)',
           borderColor: 'rgb(233, 69, 96)'
@@ -42,8 +42,15 @@ export default defineComponent({
           store.p4 = []
           store.p5 = []
           store.p6 = []
+
+          chartData.value.datasets.push({
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          })
         } else if (data[0] !== 'ENDRUN') {
-          store.sec = parseInt(data[1])
+          store.sec = parseInt(data[1]) + 1
           store.lbl.push(parseInt(data[3]))
           store.p1.push(parseFloat(data[4]))
           store.p2.push(parseFloat(data[5]))
@@ -53,7 +60,7 @@ export default defineComponent({
           store.p6.push(parseFloat(data[9]))
 
           chartData.value.labels = store.lbl
-          chartData.value.datasets[0].data = store.p1
+          chartData.value.datasets[parseInt(data[1]) - 1].data = store.p1
         }
       }
     })
