@@ -3,7 +3,7 @@
     "beforeBuildCommand": "quasar build",
     "beforeDevCommand": "quasar dev",
     "devPath": "http://localhost:9000/",
-    "distDir": "../dist"
+    "distDir": "../dist/spa"
   },
   "package": {
     "productName": "aerodaq-upm",
