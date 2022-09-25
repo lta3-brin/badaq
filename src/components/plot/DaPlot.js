@@ -1,63 +1,53 @@
-import { defineComponent , onMounted, ref} from "vue"
-import {Chart, registerables} from "chart.js"
+import { defineComponent, computed} from "vue"
+import Chart from 'chart.js/auto'
+import { Line } from 'vue-chartjs'
 
 import { useForceStore } from "src/stores/force"
 
 export default defineComponent({
   name: 'DaPlotComponent',
+  components: {
+    Line
+  },
   props: {
-    id: {type: Number, required: true},
     title: {type: String, required: true},
+    chartId: {
+      type: String,
+      default: 'k1'
+    },
+    datasetIdKey: {
+      type: String,
+      default: 'label'
+    }
   },
   setup(props) {
     const store = useForceStore()
-    const isVisible = ref(false)
+    const chartOptions = {
+      responsive: true
+    }
 
-    onMounted(() => {
-      Chart.register(...registerables)
-
+    const chartData = computed(() => {
+      const obj = store[`${props.chartId}`]
       const datasets = []
-      const obj = store[`k${props.id}`]
 
-      if (Object.keys(obj).length === 0 && obj.constructor === Object) {
-        isVisible.value = false
-      } else {
-        isVisible.value = true
+      for (const key in obj) {
+        datasets.push({
+          label: key,
+          data: obj[key],
+          backgroundColor: 'rgb(83, 52, 131)',
+          borderColor: 'rgb(233, 69, 96)'
+        })
+      }
 
-        for (const key in obj) {
-          datasets.push({
-            label: key,
-            backgroundColor: 'black',
-            borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-            data: obj[key],
-          })
-        }
-  
-        const data = {
-          labels: [...Array(Object.values(obj)[0].length).keys()],
+      return {
+          labels: [...Array(obj.SEQ01.length).keys()],
           datasets
         }
-  
-        const config = {
-          type: 'line',
-          data: data,
-          options: {
-            layout: {
-                padding: 0
-            }
-          }
-        }
-  
-        store.chart = new Chart(
-          document.getElementById(`k${props.id}`),
-          config
-        )
-      }
     })
 
     return {
-      store,
-      isVisible
+      chartData,
+      chartOptions
     }
   }
 })
