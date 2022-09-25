@@ -1,6 +1,3 @@
-
-import { title } from 'process';
-
 <template>
   <div>
     <q-card>
@@ -10,8 +7,12 @@ import { title } from 'process';
       </q-bar>
 
       <q-card-section>
-        <canvas :id="`k${id}`"></canvas>
-        <span v-if="!isVisible">Not enough data</span>
+        <Line
+          :chart-options="chartOptions"
+          :chart-data="chartData"
+          :chart-id="chartId"
+          :dataset-id-key="datasetIdKey"
+        />
       </q-card-section>
     </q-card>
   </div>
