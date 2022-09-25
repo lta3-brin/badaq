@@ -31,18 +31,20 @@ export default defineComponent({
       const datasets = []
 
       for (const key in obj) {
+        const dt = obj[key]
+
         datasets.push({
           label: key,
-          data: obj[key],
+          data: [],
           backgroundColor: 'rgb(83, 52, 131)',
           borderColor: 'rgb(233, 69, 96)'
         })
       }
 
       return {
-          labels: [...Array(obj.SEQ01.length).keys()],
-          datasets
-        }
+        labels: [...Array(obj.SEQ01.length).keys()],
+        datasets
+      }
     })
 
     return {
