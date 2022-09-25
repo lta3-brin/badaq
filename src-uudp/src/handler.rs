@@ -58,12 +58,12 @@ pub fn parse_message(
 
         tmp.pop();
 
-        let r1 = tmp[2].trim().parse::<f32>()? - app_state.koreksi[0];
-        let r2 = tmp[3].trim().parse::<f32>()? - app_state.koreksi[1];
-        let r3 = tmp[4].trim().parse::<f32>()? - app_state.koreksi[2];
-        let r4 = tmp[5].trim().parse::<f32>()? - app_state.koreksi[3];
-        let r5 = tmp[6].trim().parse::<f32>()? - app_state.koreksi[4];
-        let r6 = tmp[7].trim().parse::<f32>()? - app_state.koreksi[5];
+        let r1 = tmp[4].trim().parse::<f32>()? - app_state.koreksi[0];
+        let r2 = tmp[5].trim().parse::<f32>()? - app_state.koreksi[1];
+        let r3 = tmp[6].trim().parse::<f32>()? - app_state.koreksi[2];
+        let r4 = tmp[7].trim().parse::<f32>()? - app_state.koreksi[3];
+        let r5 = tmp[8].trim().parse::<f32>()? - app_state.koreksi[4];
+        let r6 = tmp[9].trim().parse::<f32>()? - app_state.koreksi[5];
 
         let k1 = 1481.48482578329 * r1 + 2474.88899479221 * r2 + 49.1840375906808 * r3 - 0.0511660757922492 * r4 - 0.115345955315131 * r5 + 0.00422783876641308 * r6;
         let k2 = 16.4352534976702 * r1 + 26.9975537262353 * r2 - 0.021689888082859 * r3 + 3.29520163582838 * r4 + 9.87647639575807 * r5 + 0.0452086818621841 * r6;
@@ -74,7 +74,7 @@ pub fn parse_message(
 
         ws.write_message(
             Message::Text(
-                format!("{},{},{},{},{},{},{},{}", tmp[0], tmp[1], k1, k2, k3, k4, k5, k6)
+                format!("{},{},{},{},{},{},{},{},{},{}", tmp[0], tmp[1], tmp[2], tmp[3], k1, k2, k3, k4, k5, k6)
             )
         ).unwrap();
     }
@@ -128,11 +128,11 @@ fn corr_string(st: &mut MutexGuard<AppState>, lines: &mut String, is_newline: bo
 
     if tmp[0] == "SEQ" {
         st.seq = format!("{},{}", tmp[0], tmp[1]);
-        tmp.remove(2);
-        tmp.remove(2);
+        // tmp.remove(2);
+        // tmp.remove(2);
     } else if tmp[0] == "DSN" {
-        tmp.remove(0);
-        tmp.remove(0);
+        // tmp.remove(0);
+        // tmp.remove(0);
     } else if tmp[0] == "CORR1" {
         tmp.remove(0);
     }
