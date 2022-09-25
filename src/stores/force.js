@@ -2,9 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useForceStore = defineStore('force', {
   state: () => ({
-    chart: null,
     k1: {"SEQ01": [0]},
-    k2: {"SEQ01": [0]},
+    k2: {"SEQ01": [0]}, 
     k3: {"SEQ01": [0]},
     k4: {"SEQ01": [0]},
     k5: {"SEQ01": [0]},
