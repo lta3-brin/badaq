@@ -6,7 +6,7 @@
     "distDir": "../dist/spa"
   },
   "package": {
-    "productName": "aerodaq-upm",
+    "productName": "BadaqMonitor",
     "version": "0.1.0"
   },
   "tauri": {
