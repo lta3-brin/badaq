@@ -1,3 +1,4 @@
+use csv;
 use std::{
     net::TcpStream,
     sync::{Arc, Mutex, MutexGuard},
@@ -72,10 +73,11 @@ pub fn parse_message(
         let k5 = -4.3158405735096 * r1 + 4.19570408253097 * r2 - 0.175423910741572 * r3 + 1.26471001928057 * r4 - 3.80397612831038 * r5 - 0.0080627365900235 * r6;
         let k6 = 0.686460938560072 * r1 + 1029.31912478392 * r2 - 20.6554471572674 * r3 + 0.00420047631039713 * r4 - 0.00443423766009805 * r5 - 0.463697212185334 * r6;
 
+        let lbl = format!("{},{},{},{},{},{},{},{},{},{}", tmp[0], tmp[1], tmp[2], tmp[3], k1, k2, k3, k4, k5, k6);
+
+        app_state.koleksi.push(lbl.clone());
         ws.write_message(
-            Message::Text(
-                format!("{},{},{},{},{},{},{},{},{},{}", tmp[0], tmp[1], tmp[2], tmp[3], k1, k2, k3, k4, k5, k6)
-            )
+            Message::Text(lbl)
         ).unwrap();
     }
 
@@ -89,7 +91,14 @@ pub fn parse_message(
         let lbl = "ENDRUN".to_string();
 
         ws.write_message(Message::Text(lbl)).unwrap();
+        save_csv(&app_state.nama, app_state.koleksi.to_owned())?;
+
+        app_state.nama = "".to_string();
+        app_state.koreksi = vec![];
+        app_state.koleksi = vec![];
     }
+
+    println!("{:?}", app_state);
 
     Ok(())
 }
@@ -128,14 +137,23 @@ fn corr_string(st: &mut MutexGuard<AppState>, lines: &mut String, is_newline: bo
 
     if tmp[0] == "SEQ" {
         st.seq = format!("{},{}", tmp[0], tmp[1]);
-        // tmp.remove(2);
-        // tmp.remove(2);
-    } else if tmp[0] == "DSN" {
-        // tmp.remove(0);
-        // tmp.remove(0);
     } else if tmp[0] == "CORR1" {
         tmp.remove(0);
     }
 
     tmp.join(",")
+}
+
+fn save_csv(filename: &String, koleksi: Vec<String>) -> Result<(), AppErr> {
+    let mut writer = csv::Writer::from_path(filename)?;
+
+    writer.write_record(&["sec", "secnum", "dsn", "dsnnum", "k1", "k2", "k3", "k4", "k5", "k6"])?;
+
+    for dt in koleksi {
+        writer.write_record(dt.split(","))?;
+    }
+
+    writer.flush()?;
+
+    Ok(())
 }
