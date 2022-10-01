@@ -62,6 +62,13 @@ export default defineComponent({
 
     const label_length = ref(0)
 
+    const randomRange = (min, max) => {
+      min = Math.ceil(min)
+      max = Math.floor(max)
+
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+
     onMounted(() => {
       let socket = new WebSocket("ws://localhost:9001")
 
@@ -78,46 +85,49 @@ export default defineComponent({
           store.p5 = []
           store.p6 = []
 
+          const red = randomRange(0, 255)
+          const green = randomRange(0, 255)
+          const blue = randomRange(0, 255)
           chartData1.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
-            borderColor: 'rgb(233, 69, 96)'
+            borderColor: `rgb(${red}, ${green}, ${blue})`
           })
 
           chartData2.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
-            borderColor: 'rgb(233, 69, 96)'
+            borderColor: `rgb(${red}, ${green}, ${blue})`
           })
 
           chartData3.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
-            borderColor: 'rgb(233, 69, 96)'
+            borderColor: `rgb(${red}, ${green}, ${blue})`
           })
 
           chartData4.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
-            borderColor: 'rgb(233, 69, 96)'
+            borderColor: `rgb(${red}, ${green}, ${blue})`
           })
 
           chartData5.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
-            borderColor: 'rgb(233, 69, 96)'
+            borderColor: `rgb(${red}, ${green}, ${blue})`
           })
 
           chartData6.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
             backgroundColor: 'rgb(83, 52, 131)',
-            borderColor: 'rgb(233, 69, 96)'
+            borderColor: `rgb(${red}, ${green}, ${blue})`
           })
         } else if (data[0] === 'connected') {
           store.connected = true
