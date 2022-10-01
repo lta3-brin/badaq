@@ -12,109 +12,21 @@ export default defineComponent({
   setup() {
     const store = useForceStore()
 
-    const chartOptionsFx = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'DSN'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Fx (N)'
-          }
-        }
-      }
-    }
-
-    const chartOptionsFy = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'DSN'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Fy (N)'
-          }
-        }
-      }
-    }
-
-    const chartOptionsFz = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'DSN'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Fz (N)'
-          }
-        }
-      }
-    }
-
-    const chartOptionsMx = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'DSN'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Mx (Nm)'
-          }
-        }
-      }
-    }
-
-    const chartOptionsMy = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'DSN'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'My (Nm)'
-          }
-        }
-      }
-    }
-
-    const chartOptionsMz = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'DSN'
-          }
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Mz (Nm)'
+    const initChartOption = (lablex, labely) => {
+      return {
+        responsive: true,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: lablex
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: labely
+            }
           }
         }
       }
@@ -134,77 +46,19 @@ export default defineComponent({
       }
     }
 
-    const chartData1 = ref({
-      labels: [],
-      datasets: [
-        {
-          label: `SEQ${store.sec}`,
-          data: [],
-          backgroundColor: 'rgb(83, 52, 131)',
-          borderColor: 'rgb(233, 69, 96)'
-        }
-      ]
-    })
+    const chartOptionsFx = initChartOption('DSN', 'Fx (N)')
+    const chartOptionsFy = initChartOption('DSN', 'Fy (N)')
+    const chartOptionsFz = initChartOption('DSN', 'Fz (N)')
+    const chartOptionsMx = initChartOption('DSN', 'Mx (Nm)')
+    const chartOptionsMy = initChartOption('DSN', 'My (Nm)')
+    const chartOptionsMz = initChartOption('DSN', 'Mz (Nm)')
 
-    const chartData2 = ref({
-      labels: [],
-      datasets: [
-        {
-          label: `SEQ${store.sec}`,
-          data: [],
-          backgroundColor: 'rgb(83, 52, 131)',
-          borderColor: 'rgb(233, 69, 96)'
-        }
-      ]
-    })
-
-    const chartData3 = ref({
-      labels: [],
-      datasets: [
-        {
-          label: `SEQ${store.sec}`,
-          data: [],
-          backgroundColor: 'rgb(83, 52, 131)',
-          borderColor: 'rgb(233, 69, 96)'
-        }
-      ]
-    })
-
-    const chartData4 = ref({
-      labels: [],
-      datasets: [
-        {
-          label: `SEQ${store.sec}`,
-          data: [],
-          backgroundColor: 'rgb(83, 52, 131)',
-          borderColor: 'rgb(233, 69, 96)'
-        }
-      ]
-    })
-
-    const chartData5 = ref({
-      labels: [],
-      datasets: [
-        {
-          label: `SEQ${store.sec}`,
-          data: [],
-          backgroundColor: 'rgb(83, 52, 131)',
-          borderColor: 'rgb(233, 69, 96)'
-        }
-      ]
-    })
-
-    const chartData6 = ref({
-      labels: [],
-      datasets: [
-        {
-          label: `SEQ${store.sec}`,
-          data: [],
-          backgroundColor: 'rgb(83, 52, 131)',
-          borderColor: 'rgb(233, 69, 96)'
-        }
-      ]
-    })
+    const chartData1 = ref(initChartData())
+    const chartData2 = ref(initChartData())
+    const chartData3 = ref(initChartData())
+    const chartData4 = ref(initChartData())
+    const chartData5 = ref(initChartData())
+    const chartData6 = ref(initChartData())
 
     const label_length = ref(0)
 
