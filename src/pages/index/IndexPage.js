@@ -120,6 +120,20 @@ export default defineComponent({
       }
     }
 
+    const initChartData = () => {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: `SEQ${store.sec}`,
+            data: [],
+            backgroundColor: 'rgb(83, 52, 131)',
+            borderColor: 'rgb(233, 69, 96)'
+          }
+        ]
+      }
+    }
+
     const chartData1 = ref({
       labels: [],
       datasets: [
@@ -192,6 +206,8 @@ export default defineComponent({
       ]
     })
 
+    const label_length = ref(0)
+
     onMounted(() => {
       let socket = new WebSocket("ws://localhost:9001")
 
@@ -199,8 +215,8 @@ export default defineComponent({
         const data = e.data.split(",")
 
         if (data[0] === 'ENDSEQ') {
-          console.log(chartData1.value)
-          store.lbl = []
+          label_length.value = store.lbl.length
+
           store.p1 = []
           store.p2 = []
           store.p3 = []
@@ -208,6 +224,7 @@ export default defineComponent({
           store.p5 = []
           store.p6 = []
 
+          console.log(chartData1.value)
           chartData1.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
@@ -255,7 +272,10 @@ export default defineComponent({
           console.log(data[0])
         } else if (data[0] !== 'ENDRUN') {
           store.sec = parseInt(data[1]) + 1
-          store.lbl.push(parseInt(data[3]))
+
+          if (parseInt(data[3]) > label_length.value) {
+            store.lbl.push(parseInt(data[3]))
+          }
 
           store.p1.push(parseFloat(data[5]))
           store.p2.push(parseFloat(data[7]))
