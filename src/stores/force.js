@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useForceStore = defineStore('force', {
   state: () => ({
+    connected: false,
     sec: 1,
     lbl: [],
     k1: {"SEQ1": []},
