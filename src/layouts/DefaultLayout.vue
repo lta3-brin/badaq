@@ -4,6 +4,12 @@
       <q-toolbar class="bg-grey-9 text-white">
         <q-toolbar-title>
           Dashboard
+          <q-badge
+            align="middle"
+            v-if="isConnected"
+          >
+            connected
+          </q-badge>
         </q-toolbar-title>
 
         <div>
