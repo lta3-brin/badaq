@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, computed, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
 import { Line } from 'vue-chartjs'
 
@@ -12,8 +12,112 @@ export default defineComponent({
   setup() {
     const store = useForceStore()
 
-    const chartOptions = {
-      responsive: true
+    const chartOptionsFx = {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'DSN'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Fx (N)'
+          }
+        }
+      }
+    }
+
+    const chartOptionsFy = {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'DSN'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Fy (N)'
+          }
+        }
+      }
+    }
+
+    const chartOptionsFz = {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'DSN'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Fz (N)'
+          }
+        }
+      }
+    }
+
+    const chartOptionsMx = {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'DSN'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Mx (Nm)'
+          }
+        }
+      }
+    }
+
+    const chartOptionsMy = {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'DSN'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'My (Nm)'
+          }
+        }
+      }
+    }
+
+    const chartOptionsMz = {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'DSN'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Mz (Nm)'
+          }
+        }
+      }
     }
 
     const chartData1 = ref({
@@ -95,6 +199,7 @@ export default defineComponent({
         const data = e.data.split(",")
 
         if (data[0] === 'ENDSEQ') {
+          console.log(chartData1.value)
           store.lbl = []
           store.p1 = []
           store.p2 = []
@@ -144,31 +249,42 @@ export default defineComponent({
             backgroundColor: 'rgb(83, 52, 131)',
             borderColor: 'rgb(233, 69, 96)'
           })
+        } else if (data[0] === 'connected') {
+          store.connected = true
+        } else if (data[0] === 'EXP') {
+          console.log(data[0])
         } else if (data[0] !== 'ENDRUN') {
           store.sec = parseInt(data[1]) + 1
           store.lbl.push(parseInt(data[3]))
-          store.p1.push(parseFloat(data[4]))
-          store.p2.push(parseFloat(data[5]))
-          store.p3.push(parseFloat(data[6]))
-          store.p4.push(parseFloat(data[7]))
-          store.p5.push(parseFloat(data[8]))
-          store.p6.push(parseFloat(data[9]))
 
+          store.p1.push(parseFloat(data[5]))
+          store.p2.push(parseFloat(data[7]))
+          store.p3.push(parseFloat(data[4]))
+          store.p4.push(parseFloat(data[9]))
+          store.p5.push(parseFloat(data[6]))
+          store.p6.push(parseFloat(data[8]))
+
+          // Fx
           chartData1.value.labels = store.lbl
           chartData1.value.datasets[parseInt(data[1]) - 1].data = store.p1
 
+          // Fy
           chartData2.value.labels = store.lbl
           chartData2.value.datasets[parseInt(data[1]) - 1].data = store.p2
 
+          // Fz
           chartData3.value.labels = store.lbl
           chartData3.value.datasets[parseInt(data[1]) - 1].data = store.p3
 
+          // Mx
           chartData4.value.labels = store.lbl
           chartData4.value.datasets[parseInt(data[1]) - 1].data = store.p4
 
+          // My
           chartData5.value.labels = store.lbl
           chartData5.value.datasets[parseInt(data[1]) - 1].data = store.p5
 
+          // Mz
           chartData6.value.labels = store.lbl
           chartData6.value.datasets[parseInt(data[1]) - 1].data = store.p6
         }
@@ -182,7 +298,12 @@ export default defineComponent({
       chartData4,
       chartData5,
       chartData6,
-      chartOptions
+      chartOptionsFx,
+      chartOptionsFy,
+      chartOptionsFz,
+      chartOptionsMx,
+      chartOptionsMy,
+      chartOptionsMz,
     }
   }
 })

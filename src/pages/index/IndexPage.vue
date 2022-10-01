@@ -5,12 +5,12 @@
         <q-card>
           <q-bar>
             <q-icon name="bi-display" />
-            <div>K1</div>
+            <div>Fx (N)</div>
           </q-bar>
 
           <q-card-section>
             <Line
-              :chart-options="chartOptions"
+              :chart-options="chartOptionsFx"
               :chart-data="chartData1"
               chart-id="k1"
               :height="180"
@@ -22,12 +22,12 @@
         <q-card>
           <q-bar>
             <q-icon name="bi-display" />
-            <div>K2</div>
+            <div>Fy (N)</div>
           </q-bar>
 
           <q-card-section>
             <Line
-              :chart-options="chartOptions"
+              :chart-options="chartOptionsFy"
               :chart-data="chartData2"
               chart-id="k2"
               :height="180"
@@ -39,12 +39,12 @@
         <q-card>
           <q-bar>
             <q-icon name="bi-display" />
-            <div>K3</div>
+            <div>Fz (N)</div>
           </q-bar>
 
           <q-card-section>
             <Line
-              :chart-options="chartOptions"
+              :chart-options="chartOptionsFz"
               :chart-data="chartData3"
               chart-id="k3"
               :height="180"
@@ -57,12 +57,12 @@
         <q-card>
           <q-bar>
             <q-icon name="bi-display" />
-            <div>K4</div>
+            <div>Mx (Nm)</div>
           </q-bar>
 
           <q-card-section>
             <Line
-              :chart-options="chartOptions"
+              :chart-options="chartOptionsMx"
               :chart-data="chartData4"
               chart-id="k4"
               :height="180"
@@ -75,12 +75,12 @@
         <q-card>
           <q-bar>
             <q-icon name="bi-display" />
-            <div>K5</div>
+            <div>My (Nm)</div>
           </q-bar>
 
           <q-card-section>
             <Line
-              :chart-options="chartOptions"
+              :chart-options="chartOptionsMy"
               :chart-data="chartData5"
               chart-id="k5"
               :height="180"
@@ -93,12 +93,12 @@
         <q-card>
           <q-bar>
             <q-icon name="bi-display" />
-            <div>K6</div>
+            <div>Mz (Nm)</div>
           </q-bar>
 
           <q-card-section>
             <Line
-              :chart-options="chartOptions"
+              :chart-options="chartOptionsMz"
               :chart-data="chartData6"
               chart-id="k6"
               :height="180"
