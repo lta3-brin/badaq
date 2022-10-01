@@ -78,7 +78,6 @@ export default defineComponent({
           store.p5 = []
           store.p6 = []
 
-          console.log(chartData1.value)
           chartData1.value.datasets.push({
             label: `SEQ${store.sec}`,
             data: [],
@@ -123,7 +122,13 @@ export default defineComponent({
         } else if (data[0] === 'connected') {
           store.connected = true
         } else if (data[0] === 'EXP') {
-          console.log(data[0])
+          store.sec = 1
+          chartData1.value = initChartData()
+          chartData2.value = initChartData()
+          chartData3.value = initChartData()
+          chartData4.value = initChartData()
+          chartData5.value = initChartData()
+          chartData6.value = initChartData()
         } else if (data[0] !== 'ENDRUN') {
           store.sec = parseInt(data[1]) + 1
 
@@ -161,6 +166,13 @@ export default defineComponent({
           // Mz
           chartData6.value.labels = store.lbl
           chartData6.value.datasets[parseInt(data[1]) - 1].data = store.p6
+        } else if (data[0] === 'ENDRUN') {
+          chartData1.value.datasets.pop()
+          chartData2.value.datasets.pop()
+          chartData3.value.datasets.pop()
+          chartData4.value.datasets.pop()
+          chartData5.value.datasets.pop()
+          chartData6.value.datasets.pop()
         }
       }
     })
