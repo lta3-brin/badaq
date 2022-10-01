@@ -15,7 +15,7 @@
         "sidecar": true,
         "scope": [
           {
-            "name": "src-uudp",
+            "name": "uudp",
             "sidecar": true
           }
         ]
@@ -29,7 +29,7 @@
         "depends": []
       },
       "externalBin": [
-        "./bin/src-uudp"
+        "./bin/uudp"
       ],
       "icon": [
         "icons/32x32.png",
