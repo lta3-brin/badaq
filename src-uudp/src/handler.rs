@@ -15,8 +15,17 @@ pub fn parse_message(
     let msg = msg.trim().to_string();
     let mut app_state = st.lock().unwrap();
 
+    if msg.contains("Connection Test") {
+        let lbl = "connected,".to_string();
+
+        ws.write_message(Message::Text(lbl)).unwrap();
+    }
+
     if msg.contains("EXP") {
         app_state.nama = get_name(msg.clone());
+        let lbl = "EXP,".to_string();
+
+        ws.write_message(Message::Text(lbl)).unwrap();
     }
 
     if msg.contains("CORR1") {
@@ -97,8 +106,6 @@ pub fn parse_message(
         app_state.koreksi = vec![];
         app_state.koleksi = vec![];
     }
-
-    println!("{:?}", app_state);
 
     Ok(())
 }
