@@ -4,4 +4,5 @@ pub struct AppState {
     pub koreksi: Vec<f32>,
     pub seq: String,
     pub koleksi: Vec<String>,
+    pub koef: Vec<String>
 }
