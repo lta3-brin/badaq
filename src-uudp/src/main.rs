@@ -1,6 +1,7 @@
 mod err;
 mod handler;
 mod model;
+mod calib;
 
 use std::net::TcpListener;
 use std::net::UdpSocket;
@@ -11,6 +12,7 @@ use tungstenite::accept;
 use crate::err::AppErr;
 use crate::handler::parse_message;
 use crate::model::AppState;
+use crate::calib::init;
 
 fn main() -> Result<(), AppErr> {
     let server = TcpListener::bind("127.0.0.1:9001")?;
@@ -22,8 +24,11 @@ fn main() -> Result<(), AppErr> {
         nama: "".to_string(),
         koreksi: vec![],
         seq: "".to_string(),
-        koleksi: vec![]
+        koleksi: vec![],
+        koef: vec![],
     }));
+
+    init(&state)?;
 
     for stream in server.incoming() {
         let socket = socket.try_clone()?;
