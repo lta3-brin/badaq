@@ -8,6 +8,7 @@
     "npm:autoprefixer@^10.4.20": "10.4.20_postcss@8.4.49",
     "npm:daisyui@^4.12.14": "4.12.14_postcss@8.4.49",
     "npm:lucide-solid@0.456": "0.456.0_solid-js@1.9.3__seroval@1.1.1",
+    "npm:plotly.js-dist@^2.35.2": "2.35.2",
     "npm:postcss@^8.4.49": "8.4.49",
     "npm:solid-js@^1.7.8": "1.9.3_seroval@1.1.1",
     "npm:tailwindcss@^3.4.14": "3.4.14_postcss@8.4.49",
@@ -881,6 +882,9 @@
     "pirates@4.0.6": {
       "integrity": "sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg=="
     },
+    "plotly.js-dist@2.35.2": {
+      "integrity": "sha512-zbKfz7jXGcLGoyPJxjGrKLttPiqvsEjIMHON/dEU/mnOJ+/yYoEctEEQ3qp5zQmvoovw1L47kCsQpq/GTbejBA=="
+    },
     "postcss-import@15.1.0_postcss@8.4.49": {
       "integrity": "sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==",
       "dependencies": [
@@ -1211,6 +1215,7 @@
         "npm:autoprefixer@^10.4.20",
         "npm:daisyui@^4.12.14",
         "npm:lucide-solid@0.456",
+        "npm:plotly.js-dist@^2.35.2",
         "npm:postcss@^8.4.49",
         "npm:solid-js@^1.7.8",
         "npm:tailwindcss@^3.4.14",
