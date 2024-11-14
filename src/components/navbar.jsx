@@ -11,7 +11,7 @@ export default function DefaultNavbar() {
   });
 
   return (
-    <div class="navbar bg-primary text-primary-content shadow-sm sticky">
+    <div class="navbar bg-primary text-primary-content shadow-sm">
       <div class="flex-1">
         <span class="pl-2 text-xl">Dashboard</span>
       </div>
@@ -39,7 +39,7 @@ export default function DefaultNavbar() {
             </div>
             <ul
               tabindex="0"
-              class="border border-secondary dropdown-content bg-primary rounded-box z-[1] p-2 shadow-2xl space-y-1"
+              class="border border-secondary dropdown-content bg-primary rounded-box z-10 p-2 shadow-2xl space-y-1"
             >
               <li>
                 <input
