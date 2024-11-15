@@ -1,13 +1,35 @@
+import Plotly from "plotly.js-dist-min";
 import { X, Save, ChevronDown } from "lucide-solid";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, useContext } from "solid-js";
+
+import { AppContext } from "../stores";
 
 export default function DefaultNavbar() {
-  const [isdark, setIsdark] = createSignal(
-    JSON.parse(localStorage.getItem("isdark"))
-  );
+  const { state, setState } = useContext(AppContext);
 
   createEffect(() => {
-    localStorage.setItem("isdark", JSON.stringify(isdark()));
+    if (state.k1.data) {
+      let layout;
+
+      if (state.isDark) {
+        layout = {
+          paper_bgcolor: "#2a303c",
+          plot_bgcolor: "#2a303c",
+        };
+      } else {
+        layout = {
+          paper_bgcolor: "#d8dee9",
+          plot_bgcolor: "#d8dee9",
+        };
+      }
+
+      Plotly.relayout(state.k1, layout);
+      Plotly.relayout(state.k2, layout);
+      Plotly.relayout(state.k3, layout);
+      Plotly.relayout(state.k4, layout);
+      Plotly.relayout(state.k5, layout);
+      Plotly.relayout(state.k6, layout);
+    }
   });
 
   return (
@@ -48,7 +70,7 @@ export default function DefaultNavbar() {
                   class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                   aria-label="Light"
                   value="default"
-                  onChange={() => setIsdark(!isdark())}
+                  onChange={() => setState("isDark", !state.isDark)}
                 />
               </li>
               <li>
@@ -58,7 +80,7 @@ export default function DefaultNavbar() {
                   class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                   aria-label="Dark"
                   value="business"
-                  onChange={() => setIsdark(!isdark())}
+                  onChange={() => setState("isDark", !state.isDark)}
                 />
               </li>
             </ul>
