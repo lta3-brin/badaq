@@ -59,7 +59,7 @@ export default function DefaultMonitor() {
   });
 
   return (
-    <div class="container mx-auto px-4 pt-4 space-y-8">
+    <div class="container mx-auto px-4 py-4 space-y-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <DefaultCard title="Force on x axis" description="X = DSN, Y = Fx (N)">
           <div ref={(el) => setState("k1", el)} class="w-full" />
