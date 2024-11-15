@@ -15,11 +15,17 @@ export default function DefaultNavbar() {
         layout = {
           paper_bgcolor: "#2a303c",
           plot_bgcolor: "#2a303c",
+          "xaxis.color": "#b2ccd6",
+          "yaxis.color": "#b2ccd6",
+          "legend.font.color": "#b2ccd6",
         };
       } else {
         layout = {
           paper_bgcolor: "#d8dee9",
           plot_bgcolor: "#d8dee9",
+          "xaxis.color": "#444",
+          "yaxis.color": "#444",
+          "legend.font.color": "#444",
         };
       }
 
