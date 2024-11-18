@@ -1,6 +1,5 @@
 import socket
 import threading
-import time
 
 
 def handle_client(socket):
@@ -9,8 +8,7 @@ def handle_client(socket):
             message = line.strip().encode()
             print(message)
             socket.send(message)
-            time.sleep(1)
-            # input("")
+            input("ENTER")
 
         socket.close()
 
