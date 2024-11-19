@@ -1,0 +1,15 @@
+[package]
+name = "aerolib"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.93"
+log = "0.4.22"
+tauri = { version = "2", features = [], optional = true }
+tauri-plugin-shell = { version = "2", features = [], optional = true }
+tokio = { version = "1.41.1", features = ["full"], optional = true }
+
+[features]
+aerotauri = ["dep:tauri", "dep:tauri-plugin-shell"]
+aeronet = ["dep:tokio"]
