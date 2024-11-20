@@ -211,6 +211,7 @@ name = "badaq"
 version = "0.1.0"
 dependencies = [
  "aerolib",
+ "anyhow",
  "log",
  "serde_json",
  "tauri",
