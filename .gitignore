@@ -3,3 +3,10 @@ dist
 .env
 *.db
 *.venv
+
+/target/
+/logs/
+/gen/schemas
+src-dummy/target/
+src-dummy/logs/
+src-dummy/gen/schemas
