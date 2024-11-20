@@ -1,4 +1,7 @@
+mod cmd;
+
 use aerolib::aerotauri::{deploy, env};
+use cmd::net::try_connect;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -25,7 +28,7 @@ pub fn run() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![try_connect])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
