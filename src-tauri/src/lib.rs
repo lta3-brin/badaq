@@ -1,13 +1,11 @@
-mod utils;
-
-use utils::{deploy::deploy_surreal, env::load_env};
+use aerolib::aerotauri::{deploy, env};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
-            load_env(app)?;
-            deploy_surreal(app)?;
+            env::load_env(app)?;
+            deploy::deploy_surreal(app)?;
 
             Ok(())
         })
