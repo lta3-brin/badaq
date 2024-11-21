@@ -1,10 +1,14 @@
-import { onMount, useContext } from "solid-js";
+import { createResource, onMount, useContext } from "solid-js";
+import { invoke, Channel } from "@tauri-apps/api/core";
 import Plotly from "plotly.js-dist-min";
 
 import DefaultCard from "./card";
 import { AppContext } from "../stores";
 
 export default function DefaultMonitor() {
+  const onEvent = new Channel();
+  const { state, setState } = useContext(AppContext);
+
   const layout = {
     responsive: true,
     showlegend: true,
@@ -33,9 +37,20 @@ export default function DefaultMonitor() {
     displaylogo: false,
   };
 
-  const { state, setState } = useContext(AppContext);
+  onEvent.onmessage = (message) => {
+    console.log(message);
+  };
 
-  onMount(() => {
+  const fetchTcp = async () => {
+    await invoke("try_connect", {
+      addr: import.meta.env.VITE_TCP_ADDR,
+      onevent: onEvent,
+    });
+  };
+
+  const [_] = createResource(fetchTcp);
+
+  onMount(async () => {
     const trace1_k1 = {
       x: [0, 1, 2, 3, 4],
       y: [0, 10, 15, 13, 17],
