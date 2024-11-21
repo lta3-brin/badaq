@@ -12,4 +12,4 @@ tauri-plugin-shell = { version = "2", features = [], optional = true }
 tokio = { version = "1.41.1", features = ["full"], optional = true }
 
 [features]
-aerotauri = ["dep:tauri", "dep:tauri-plugin-shell", "dep:dotenv"]
+aerotauri = ["dep:tauri", "dep:tauri-plugin-shell", "dep:dotenv", "dep:tokio"]
