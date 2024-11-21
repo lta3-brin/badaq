@@ -23,8 +23,6 @@ pub async fn try_connect(addr: String, onevent: tauri::ipc::Channel<String>) {
                         Ok(_) => match str::from_utf8(&buf) {
                             Ok(message) => {
                                 onevent.send(message.to_string()).unwrap();
-
-                                println!("{}", message);
                             }
 
                             Err(err) => onevent.send(format!("ERROR:{}", err.to_string())).unwrap(),
