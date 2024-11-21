@@ -27,23 +27,21 @@ pub async fn try_connect(addr: String, onevent: tauri::ipc::Channel<String>) {
                                 println!("{}", message);
                             }
 
-                            Err(err) => {
-                                onevent.send(format!("ERROR: {}", err.to_string())).unwrap()
-                            }
+                            Err(err) => onevent.send(format!("ERROR:{}", err.to_string())).unwrap(),
                         },
 
                         Err(ref err) if err.kind() == io::ErrorKind::WouldBlock => {
                             continue;
                         }
 
-                        Err(err) => onevent.send(format!("ERROR: {}", err.to_string())).unwrap(),
+                        Err(err) => onevent.send(format!("ERROR:{}", err.to_string())).unwrap(),
                     }
                 }
 
-                Err(err) => onevent.send(format!("ERROR: {}", err.to_string())).unwrap(),
+                Err(err) => onevent.send(format!("ERROR:{}", err.to_string())).unwrap(),
             }
         },
 
-        Err(err) => onevent.send(format!("ERROR: {}", err.to_string())).unwrap(),
+        Err(err) => onevent.send(format!("ERROR:{}", err.to_string())).unwrap(),
     }
 }
