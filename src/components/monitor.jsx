@@ -1,13 +1,15 @@
-import { createResource, onMount, useContext } from "solid-js";
+import { createResource, createSignal, onMount, useContext } from "solid-js";
 import { invoke, Channel } from "@tauri-apps/api/core";
 import Plotly from "plotly.js-dist-min";
 
 import DefaultCard from "./card";
 import { AppContext } from "../stores";
+import { SimpleDialog } from "./dialog";
 
 export default function DefaultMonitor() {
   const onEvent = new Channel();
   const { state, setState } = useContext(AppContext);
+  const [message, setMessage] = createSignal();
 
   const layout = {
     responsive: true,
@@ -37,8 +39,14 @@ export default function DefaultMonitor() {
     displaylogo: false,
   };
 
-  onEvent.onmessage = (message) => {
-    console.log(message);
+  onEvent.onmessage = (msg) => {
+    if (msg.includes("ERROR")) {
+      setMessage(msg.replace("ERROR:", ""));
+
+      document.getElementById("simple_dialog").showModal();
+    } else {
+      console.log(message());
+    }
   };
 
   const fetchTcp = async () => {
@@ -111,6 +119,8 @@ export default function DefaultMonitor() {
           <div ref={(el) => setState("k6", el)} class="w-full" />
         </DefaultCard>
       </div>
+
+      <SimpleDialog title="Service Unavailable" description={message()} />
     </div>
   );
 }
