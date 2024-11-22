@@ -5,17 +5,7 @@ import threading
 def handle_client(socket):
     request = socket.recv(1024)
 
-    socket.send(request.strip().encode())
-    socket.close()
-
-    # with open("run.txt", "r") as file:
-    #     for line in file:
-    #         message = line.strip().encode()
-    #         print(message)
-    #         socket.send(message)
-    #         input("ENTER")
-
-    #     socket.close()
+    socket.send(request)
 
 
 if __name__ == "__main__":
