@@ -1,18 +1,31 @@
 # BADAQ
 
-Repositori pengembangan sistem DAQ external balance dengan load cell untuk Universitas Putra Malaysia.
+Repositori pengembangan sistem DAQ external balance dengan load cell.
 
-## Memulai Pengembangan
+## Sebelum Pengembangan
 
-Pertama, jalankan server lokal selama pengembangan:
+Pasang [Rust](https://www.rust-lang.org/tools/install) sesuai dengan sistem operasi. Apabila sudah terpasang, perlu memperhatikan syarat minimum untuk pengembangan di tautan [INI](https://tauri.app/start/prerequisites/).
+
+pengembangan aplikasi menggunakan [TAURI](https://tauri.app/). Untuk itu, perlu *command line interface* ([CLI](https://tauri.app/reference/cli/)) yang disediakan, seperti:
 
 ```bash
-npm run dev
-# or
-yarn dev
+cargo install tauri-cli --version "^2.0.0" --locked
 ```
 
-Coba buka tautan [http://localhost:3000](http://localhost:3000) di browser untuk melihat hasil.
+Dari sisi *frontend*, diperlukan **Deno**. Pemasangan dapat dilakukan sesuai tautan [instalasi](https://docs.deno.com/runtime/#install-deno). Setelah terpasang, jalankan instruksi berikut:
 
-Mulailah untuk mengubah halaman baru di `pages/index.js`. Ubahan halaman akan diperbarui secara otomatis setelah
-disimpan.
+```bash
+deno install
+```
+
+Buat file `.env.development.local` dalam direktori yang sama dengan file `vite.config.js` berada. Adapun isi dari file sama dengan (modifikasi seperlunya bagian setelah simbol '=') isi file `.env.development`.
+
+Buat juga file `.env` dalam direktori `src-tauri` dengan isi sama dengan (modifikasi seperlunya bagian setelah simbol '=') file `.env.development`.
+
+## Mulai Pengembangan
+
+Dengan asumsi persyaratan sudah terpenuhi, jalankan instruksi berikut di terminal:
+
+```bash
+deno task tauri dev
+```
