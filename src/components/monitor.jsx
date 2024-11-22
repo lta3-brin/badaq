@@ -49,13 +49,17 @@ export default function DefaultMonitor() {
     const onEvent = new Channel();
 
     onEvent.onmessage = (msg) => {
+      setMessage(null);
+
       if (msg.includes("ERROR")) {
         setMessage(msg.replace("ERROR:", ""));
 
         document.getElementById("simple_dialog").showModal();
-      } else {
-        setMessage(null);
+      } else if (msg.includes("LOST")) {
+        setMessage("TCP connection lost");
 
+        document.getElementById("simple_dialog").showModal();
+      } else {
         console.log(msg);
       }
     };
