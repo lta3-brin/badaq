@@ -1,4 +1,10 @@
-import { createResource, createSignal, onMount, useContext } from "solid-js";
+import {
+  createResource,
+  createSignal,
+  onMount,
+  Suspense,
+  useContext,
+} from "solid-js";
 import { invoke, Channel } from "@tauri-apps/api/core";
 import Plotly from "plotly.js-dist-min";
 
@@ -7,7 +13,7 @@ import { AppContext } from "../stores";
 import { SimpleDialog } from "./dialog";
 
 export default function DefaultMonitor() {
-  const onEvent = new Channel();
+  let refSimpleDialog;
   const { state, setState } = useContext(AppContext);
   const [message, setMessage] = createSignal();
 
@@ -39,26 +45,34 @@ export default function DefaultMonitor() {
     displaylogo: false,
   };
 
-  onEvent.onmessage = (msg) => {
-    if (msg.includes("ERROR")) {
-      setMessage(msg.replace("ERROR:", ""));
-
-      document.getElementById("simple_dialog").showModal();
-    } else {
-      console.log(message());
-    }
-  };
-
   const fetchTcp = async () => {
+    const onEvent = new Channel();
+
+    onEvent.onmessage = (msg) => {
+      if (msg.includes("ERROR")) {
+        setMessage(msg.replace("ERROR:", ""));
+
+        document.getElementById("simple_dialog").showModal();
+      } else {
+        setMessage(null);
+
+        console.log(msg);
+      }
+    };
+
     await invoke("try_connect", {
       addr: import.meta.env.VITE_TCP_ADDR,
       onevent: onEvent,
     });
   };
 
-  const [_] = createResource(fetchTcp);
+  const [_, { refetch }] = createResource(fetchTcp);
 
   onMount(async () => {
+    refSimpleDialog.addEventListener("click", () => {
+      refetch();
+    });
+
     const trace1_k1 = {
       x: [0, 1, 2, 3, 4],
       y: [0, 10, 15, 13, 17],
@@ -120,7 +134,11 @@ export default function DefaultMonitor() {
         </DefaultCard>
       </div>
 
-      <SimpleDialog title="Service Unavailable" description={message()} />
+      <Suspense fallback={<></>}>
+        <SimpleDialog ref={refSimpleDialog} title="Service Unavailable">
+          <p class="py-4">{message()}</p>
+        </SimpleDialog>
+      </Suspense>
     </div>
   );
 }
