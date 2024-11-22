@@ -1,13 +1,14 @@
-mod utils;
+mod cmd;
 
-use utils::{deploy::deploy_surreal, env::load_env};
+use aerolib::aerotauri::{deploy, env};
+use cmd::net::try_connect;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
-            load_env(app)?;
-            deploy_surreal(app)?;
+            env::load_env(app)?;
+            deploy::deploy_surreal(app)?;
 
             Ok(())
         })
@@ -27,7 +28,7 @@ pub fn run() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![try_connect])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

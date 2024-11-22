@@ -1,5 +1,4 @@
 use anyhow::Result;
-use colored::Colorize;
 use std::sync::{Arc, Mutex};
 use tauri::{App, Manager};
 use tauri_plugin_shell::ShellExt;
@@ -16,7 +15,7 @@ pub fn deploy_surreal(app: &mut App) -> Result<()> {
         "rocksdb:badaq.db",
     ]);
 
-    log::info!("{}", "Spawning database...".bright_magenta());
+    log::info!("{}", "Spawning database...");
     let (_rx, comm) = surreal_cmd.spawn()?;
     let cmd = Arc::new(Mutex::new(Some(comm)));
     let cmdclone = cmd.clone();
@@ -27,12 +26,12 @@ pub fn deploy_surreal(app: &mut App) -> Result<()> {
                 Ok(mut cmdlock) => {
                     if let Some(cmdclone_lock) = cmdlock.take() {
                         if let Err(err) = cmdclone_lock.kill() {
-                            log::error!("{}", err.to_string().bright_red());
+                            log::error!("{}", err.to_string());
                         }
                     }
                 }
 
-                Err(err) => log::error!("{}", err.to_string().bright_red()),
+                Err(err) => log::error!("{}", err.to_string()),
             },
 
             _ => {}
