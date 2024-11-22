@@ -1,10 +1,11 @@
 use core::str;
 use std::io;
+use tauri::AppHandle;
 
 use aerolib::aerotauri::tcp::TcpKlien;
 
 #[tauri::command]
-pub async fn try_connect(addr: String, onevent: tauri::ipc::Channel<String>) {
+pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Channel<String>) {
     let klien = TcpKlien::new(addr);
 
     match klien.get_stream().await {
