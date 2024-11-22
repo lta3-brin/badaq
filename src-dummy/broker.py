@@ -3,14 +3,19 @@ import threading
 
 
 def handle_client(socket):
-    with open("run.txt", "r") as file:
-        for line in file:
-            message = line.strip().encode()
-            print(message)
-            socket.send(message)
-            input("ENTER")
+    request = socket.recv(1024)
 
-        socket.close()
+    socket.send(request.strip().encode())
+    socket.close()
+
+    # with open("run.txt", "r") as file:
+    #     for line in file:
+    #         message = line.strip().encode()
+    #         print(message)
+    #         socket.send(message)
+    #         input("ENTER")
+
+    #     socket.close()
 
 
 if __name__ == "__main__":
