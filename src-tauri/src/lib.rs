@@ -1,6 +1,10 @@
 mod cmd;
 
-use aerolib::aerotauri::{deploy, env};
+use std::sync::Mutex;
+
+use tauri::Manager;
+
+use aerolib::aerotauri::{deploy, env, state::AppState};
 use cmd::net::try_connect;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -9,6 +13,8 @@ pub fn run() {
         .setup(|app| {
             env::load_env(app)?;
             deploy::deploy_surreal(app)?;
+
+            app.manage(Mutex::new(AppState::default()));
 
             Ok(())
         })
