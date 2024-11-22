@@ -3,9 +3,14 @@ import threading
 
 
 def handle_client(socket):
-    request = socket.recv(1024)
+    while True:
+        request = socket.recv(1024)
 
-    socket.send(request)
+        if not request:
+            break
+
+        print(request.decode("utf-8"))
+        socket.send(request)
 
 
 if __name__ == "__main__":
