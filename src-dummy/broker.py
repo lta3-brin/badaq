@@ -1,16 +1,26 @@
 import socket
 import threading
 
+from paho.mqtt import client as mqtt_client
 
-def handle_client(socket):
-    while True:
-        request = socket.recv(1024)
 
-        if not request:
-            break
+def handle_client(socket, client, topic, idx):
+    if idx == 1:  # sebagai publisher di mqtt
+        while True:
+            request = socket.recv(1024)
+            client.publish(topic, request)
 
-        print(request.decode("utf-8"))
-        socket.send(request)
+            if not request:
+                break
+
+    else:  # sebagai subscriber di mqtt
+
+        def on_message(client, userdata, msg):
+            socket.send(msg.payload)
+
+        client.subscribe(topic)
+        client.on_message = on_message
+        client.loop_forever()
 
 
 if __name__ == "__main__":
@@ -23,12 +33,22 @@ if __name__ == "__main__":
     server.listen(5)
 
     print(f"Listening on port {bind_ip}:{bind_port}")
+    port = 1883
+    broker = "127.0.0.1"
+    topic = "python/tcpbroker"
+    client_id = mqtt_client.CallbackAPIVersion.VERSION2
+    klient = mqtt_client.Client(client_id)
+    klient.connect(broker, port)
+    klient.subscribe(topic)
+
+    idx = 1
     while True:
         client, addr = server.accept()
         print(f"Accepted connection from: {addr[0]}:{addr[1]}")
 
         client_handler = threading.Thread(
             target=handle_client,
-            args=(client,),
+            args=(client, klient, topic, idx),
         )
         client_handler.start()
+        idx += 1
