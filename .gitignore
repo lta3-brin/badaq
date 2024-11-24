@@ -4,6 +4,8 @@ dist
 *.db
 *.venv
 *.local
+*.user
+*.user.*
 
 /target/
 /logs/
@@ -11,3 +13,4 @@ dist
 src-dummy/target/
 src-dummy/logs/
 src-dummy/gen/schemas
+src-dummy/producer/build
