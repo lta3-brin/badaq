@@ -1,5 +1,6 @@
 import socket
 import threading
+import time
 
 from paho.mqtt import client as mqtt_client
 
@@ -7,7 +8,8 @@ from paho.mqtt import client as mqtt_client
 def handle_client(socket, client, topic, idx):
     if idx == 1:  # sebagai publisher di mqtt
         while True:
-            request = socket.recv(1024)
+            request = socket.recv(10000)
+
             client.publish(topic, request)
 
             if not request:
@@ -37,9 +39,8 @@ if __name__ == "__main__":
     broker = "127.0.0.1"
     topic = "python/tcpbroker"
     client_id = mqtt_client.CallbackAPIVersion.VERSION2
-    klient = mqtt_client.Client(client_id)
+    klient = mqtt_client.Client(client_id, client_id="tcp_broker")
     klient.connect(broker, port)
-    klient.subscribe(topic)
 
     idx = 1
     while True:
