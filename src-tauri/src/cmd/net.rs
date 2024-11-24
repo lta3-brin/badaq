@@ -23,7 +23,17 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
 
                         Ok(_) => match str::from_utf8(&buf) {
                             Ok(message) => {
-                                onevent.send(message.to_string()).unwrap();
+                                if message.contains("EXP") {
+                                    onevent.send("EXP".into()).unwrap()
+                                } else if message.contains("CORR1") {
+                                    onevent.send("CORR1".into()).unwrap()
+                                } else if message.contains("DSN") {
+                                    onevent.send("DSN".into()).unwrap()
+                                } else if message.contains("ENDSEQ") {
+                                    onevent.send("ENDSEQ".into()).unwrap()
+                                } else if message.contains("ENDRUN") {
+                                    onevent.send("ENDRUN".into()).unwrap()
+                                }
                             }
 
                             Err(err) => onevent.send(format!("ERROR:{}", err.to_string())).unwrap(),
