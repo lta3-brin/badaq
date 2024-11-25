@@ -41,7 +41,7 @@ export default function DefaultNavbar() {
   return (
     <div class="navbar bg-primary text-primary-content shadow-sm">
       <div class="flex-1">
-        <span class="pl-2 text-xl">Dashboard</span>
+        <span class="pl-2 text-xl">Monitor</span>
       </div>
       <div class="flex-none space-x-2">
         <div
