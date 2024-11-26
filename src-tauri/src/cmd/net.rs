@@ -12,7 +12,7 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
         Ok(stream) => loop {
             match stream.readable().await {
                 Ok(_) => {
-                    let mut buf = vec![0; 1024];
+                    let mut buf = vec![0; 10000];
                     let state = app.state::<Mutex<AppState>>();
                     let mut state = state.lock().unwrap();
 
@@ -28,12 +28,13 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
                                 if message.contains("EXP") {
                                     state.nama = klien.get_name(message.into());
 
-                                    onevent.send("EXP,".into()).unwrap()
+                                    onevent.send("EXP,".into()).unwrap();
                                 } else if message.contains("CORR1") {
-                                    println!("{}", message.clone());
-                                    if let Err(err) =
-                                        klien.corr_parsing(&mut state, message.trim().to_string())
-                                    {
+                                    if let Err(err) = klien.corr_string(
+                                        &mut state,
+                                        message.trim().to_string(),
+                                        false,
+                                    ) {
                                         onevent.send(format!("ERROR:{}", err.to_string())).unwrap()
                                     }
                                 } else if message.contains("DSN") {
