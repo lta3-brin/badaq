@@ -313,28 +313,6 @@ impl TcpKlien {
                 col("kl6_std").alias("k6_std"),
             ]);
 
-        // let mut val: Vec<f32> = vec![];
-        // for koef in state.koef.to_owned() {
-        //     let k = koef.split(",").collect::<Vec1<&str>>();
-        //     let a = k[0].parse::<f32>()?;
-        //     let b = k[1].parse::<f32>()?;
-        //     let c = k[2].parse::<f32>()?;
-        //     let d = k[3].parse::<f32>()?;
-        //     let e = k[4].parse::<f32>()?;
-        //     let f = k[5].parse::<f32>()?;
-
-        //     let res = a * r1 + b * r2 + c * r3 + d * r4 + e * r5 + f * r6;
-
-        //     val.push(res);
-        // }
-
-        // let lbl = format!(
-        //     "{},{},{},{},{},{},{},{},{},{}",
-        //     tmp[0], tmp[1], tmp[2], tmp[3], val[0], val[1], val[2], val[3], val[4], val[5]
-        // );
-
-        // state.koleksi.push(lbl.clone());
-
         Ok(nlf)
     }
 
