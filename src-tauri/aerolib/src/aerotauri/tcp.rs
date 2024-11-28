@@ -20,24 +20,30 @@ impl TcpKlien {
     }
 
     pub fn get_name(&self, msg: String) -> String {
-        let lines = msg.split("\n");
-
+        let mut ln;
         let mut f = "".to_string();
-        for line in lines {
+
+        for line in msg.lines() {
             if line.contains("EXP") {
-                let ln: Vec<&str> = line.split(",").collect();
+                ln = line.split(",").collect::<Vec<&str>>();
 
                 f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
-            }
-
-            if line.contains("RUN") {
-                let ln: Vec<&str> = line.split(",").collect();
+            } else if line.contains("RUN") {
+                ln = line.split(",").collect::<Vec<&str>>();
 
                 f.push_str(&format!("-RUN{}", ln[1].trim()))
+            } else if line.contains("SEQ") {
+                ln = line.split(",").collect::<Vec<&str>>();
+
+                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()))
+            } else if line.contains("DSN") {
+                ln = line.split(",").collect::<Vec<&str>>();
+
+                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()))
             }
         }
 
-        format!("{f}.csv")
+        f
     }
 
     pub fn parse_buff(&self, lines: String) -> Result<LazyFrame> {
