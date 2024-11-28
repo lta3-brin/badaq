@@ -1,9 +1,7 @@
 use anyhow::Result;
 use polars::prelude::*;
-use std::{io::Cursor, sync::MutexGuard};
+use std::io::Cursor;
 use tokio::net::TcpStream;
-
-use super::state::AppState;
 
 #[derive(Debug)]
 pub struct TcpKlien {
@@ -101,33 +99,65 @@ impl TcpKlien {
         Ok(lf)
     }
 
-    pub fn dsn_parsing(&self, _state: &mut MutexGuard<AppState>, _lines: String) -> Result<String> {
-        // let msg;
-        // let mut tmp = vec![];
-
-        // if lines.contains("SEQ") {
-        //     msg = self.corr_string(state, lines, true);
-
-        //     for line in msg.trim().split(",") {
-        //         tmp.push(line.trim());
-        //     }
-        // } else {
-        //     let lbl = state.seq.to_owned();
-        //     msg = format!("{},{}", lbl, self.corr_string(state, lines, false).unwrap());
-
-        //     for line in msg.trim().split(",") {
-        //         tmp.push(line.trim());
-        //     }
-        // }
-
-        // tmp.pop();
-
-        // let r1 = tmp[4].trim().parse::<f32>()? - state.koreksi[0];
-        // let r2 = tmp[5].trim().parse::<f32>()? - state.koreksi[1];
-        // let r3 = tmp[6].trim().parse::<f32>()? - state.koreksi[2];
-        // let r4 = tmp[7].trim().parse::<f32>()? - state.koreksi[3];
-        // let r5 = tmp[8].trim().parse::<f32>()? - state.koreksi[4];
-        // let r6 = tmp[9].trim().parse::<f32>()? - state.koreksi[5];
+    pub fn calc_data(&self, lf: LazyFrame, other: LazyFrame) -> Result<LazyFrame> {
+        let nlf = lf
+            .with_row_index("index", None)
+            .join(
+                other.with_row_index("index", None),
+                [col("index")],
+                [col("index")],
+                JoinArgs::new(JoinType::Inner),
+            )
+            .select([
+                (col("kol1") - col("kol1_right")).alias("kl1"),
+                (col("kol1_mean") - col("kol1_mean_right")).alias("kl1_mean"),
+                (col("kol1_std") - col("kol1_std_right")).alias("kl1_std"),
+                (col("kol1_rms") - col("kol1_rms_right")).alias("kl1_rms"),
+                (col("kol2") - col("kol2_right")).alias("kl2"),
+                (col("kol2_mean") - col("kol2_mean_right")).alias("kl2_mean"),
+                (col("kol2_std") - col("kol2_std_right")).alias("kl2_std"),
+                (col("kol2_rms") - col("kol2_rms_right")).alias("kl2_rms"),
+                (col("kol3") - col("kol3_right")).alias("kl3"),
+                (col("kol3_mean") - col("kol3_mean_right")).alias("kl3_mean"),
+                (col("kol3_std") - col("kol3_std_right")).alias("kl3_std"),
+                (col("kol3_rms") - col("kol3_rms_right")).alias("kl3_rms"),
+                (col("kol4") - col("kol4_right")).alias("kl4"),
+                (col("kol4_mean") - col("kol4_mean_right")).alias("kl4_mean"),
+                (col("kol4_std") - col("kol4_std_right")).alias("kl4_std"),
+                (col("kol4_rms") - col("kol4_rms_right")).alias("kl4_rms"),
+                (col("kol5") - col("kol5_right")).alias("kl5"),
+                (col("kol5_mean") - col("kol5_mean_right")).alias("kl5_mean"),
+                (col("kol5_std") - col("kol5_std_right")).alias("kl5_std"),
+                (col("kol5_rms") - col("kol5_rms_right")).alias("kl5_rms"),
+                (col("kol6") - col("kol6_right")).alias("kl6"),
+                (col("kol6_mean") - col("kol6_mean_right")).alias("kl6_mean"),
+                (col("kol6_std") - col("kol6_std_right")).alias("kl6_std"),
+                (col("kol6_rms") - col("kol6_rms_right")).alias("kl6_rms"),
+            ])
+            .select([
+                (1481.48482578329 * col("kl1")
+                    + 2474.88899479221 * col("kl2")
+                    + 49.1840375906808 * col("kl3")
+                    + -0.0511660757922492 * col("kl4")
+                    + -0.115345955315131 * col("kl5")
+                    + 0.00422783876641308 * col("kl6"))
+                .alias("k1"),
+                (1481.48482578329 * col("kl1_mean")
+                    + 2474.88899479221 * col("kl2_mean")
+                    + 49.1840375906808 * col("kl3_mean")
+                    + -0.0511660757922492 * col("kl4_mean")
+                    + -0.115345955315131 * col("kl5_mean")
+                    + 0.00422783876641308 * col("kl6_mean"))
+                .alias("k1_mean"),
+                (1481.48482578329 * col("kl1_rms")
+                    + 2474.88899479221 * col("kl2_rms")
+                    + 49.1840375906808 * col("kl3_rms")
+                    + -0.0511660757922492 * col("kl4_rms")
+                    + -0.115345955315131 * col("kl5_rms")
+                    + 0.00422783876641308 * col("kl6_rms"))
+                .alias("k1_rms"),
+                col("kl1_std").alias("k1_std"),
+            ]);
 
         // let mut val: Vec<f32> = vec![];
         // for koef in state.koef.to_owned() {
@@ -151,7 +181,7 @@ impl TcpKlien {
 
         // state.koleksi.push(lbl.clone());
 
-        Ok("lbl".to_string())
+        Ok(nlf)
     }
 
     pub fn save_csv(&self, filename: &String, koleksi: Vec<String>) -> Result<()> {
