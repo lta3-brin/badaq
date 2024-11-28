@@ -100,6 +100,50 @@ impl TcpKlien {
     }
 
     pub fn calc_data(&self, lf: LazyFrame, other: LazyFrame) -> Result<LazyFrame> {
+        // Per baris
+        // Aslinya: wtr.write_record(&["1481.48482578329", "2474.88899479221", "49.1840375906808", "-0.0511660757922492", "-0.115345955315131", "0.00422783876641308"])?;
+        let a1 = 1481.48482578329;
+        let a2 = 2474.88899479221;
+        let a3 = 49.1840375906808;
+        let a4 = -0.0511660757922492;
+        let a5 = -0.115345955315131;
+        let a6 = 0.00422783876641308;
+
+        let b1 = 16.4352534976702;
+        let b2 = 26.9975537262353;
+        let b3 = -0.021689888082859;
+        let b4 = 3.29520163582838;
+        let b5 = 9.87647639575807;
+        let b6 = 0.0452086818621841;
+
+        let c1 = 700.96720273151;
+        let c2 = -593.068144510914;
+        let c3 = -11.7924782744019;
+        let c4 = -1.33147879149042;
+        let c5 = -3.96182250409738;
+        let c6 = -0.0123280913871845;
+
+        let d1 = -90.3481683057332;
+        let d2 = -111.881088810194;
+        let d3 = -1.83966205205915;
+        let d4 = -0.030205770481682;
+        let d5 = -0.0296322284753154;
+        let d6 = 1.00985294186794;
+
+        let e1 = -4.3158405735096;
+        let e2 = 4.19570408253097;
+        let e3 = -0.175423910741572;
+        let e4 = 1.26471001928057;
+        let e5 = -3.80397612831038;
+        let e6 = -0.0080627365900235;
+
+        let f1 = 0.686460938560072;
+        let f2 = 1029.31912478392;
+        let f3 = -20.6554471572674;
+        let f4 = 0.00420047631039713;
+        let f5 = -0.00443423766009805;
+        let f6 = -0.463697212185334;
+
         let nlf = lf
             .with_row_index("index", None)
             .join(
@@ -135,33 +179,143 @@ impl TcpKlien {
                 (col("kol6_rms") - col("kol6_rms_right")).alias("kl6_rms"),
             ])
             .select([
-                (1481.48482578329 * col("kl1")
-                    + 2474.88899479221 * col("kl2")
-                    + 49.1840375906808 * col("kl3")
-                    + -0.0511660757922492 * col("kl4")
-                    + -0.115345955315131 * col("kl5")
-                    + 0.00422783876641308 * col("kl6"))
+                (lit(a1) * col("kl1")
+                    + lit(a2) * col("kl2")
+                    + lit(a3) * col("kl3")
+                    + lit(a4) * col("kl4")
+                    + lit(a5) * col("kl5")
+                    + lit(a6) * col("kl6"))
                 .alias("k1"),
-                (1481.48482578329 * col("kl1_mean")
-                    + 2474.88899479221 * col("kl2_mean")
-                    + 49.1840375906808 * col("kl3_mean")
-                    + -0.0511660757922492 * col("kl4_mean")
-                    + -0.115345955315131 * col("kl5_mean")
-                    + 0.00422783876641308 * col("kl6_mean"))
+                (lit(a1) * col("kl1_mean")
+                    + lit(a2) * col("kl2_mean")
+                    + lit(a3) * col("kl3_mean")
+                    + lit(a4) * col("kl4_mean")
+                    + lit(a5) * col("kl5_mean")
+                    + lit(a6) * col("kl6_mean"))
                 .alias("k1_mean"),
-                (1481.48482578329 * col("kl1_rms")
-                    + 2474.88899479221 * col("kl2_rms")
-                    + 49.1840375906808 * col("kl3_rms")
-                    + -0.0511660757922492 * col("kl4_rms")
-                    + -0.115345955315131 * col("kl5_rms")
-                    + 0.00422783876641308 * col("kl6_rms"))
+                (lit(a1) * col("kl1_rms")
+                    + lit(a2) * col("kl2_rms")
+                    + lit(a3) * col("kl3_rms")
+                    + lit(a4) * col("kl4_rms")
+                    + lit(a5) * col("kl5_rms")
+                    + lit(a6) * col("kl6_rms"))
                 .alias("k1_rms"),
                 col("kl1_std").alias("k1_std"),
+                (lit(b1) * col("kl1")
+                    + lit(b2) * col("kl2")
+                    + lit(b3) * col("kl3")
+                    + lit(b4) * col("kl4")
+                    + lit(b5) * col("kl5")
+                    + lit(b6) * col("kl6"))
+                .alias("k2"),
+                (lit(b1) * col("kl1_mean")
+                    + lit(b2) * col("kl2_mean")
+                    + lit(b3) * col("kl3_mean")
+                    + lit(b4) * col("kl4_mean")
+                    + lit(b5) * col("kl5_mean")
+                    + lit(b6) * col("kl6_mean"))
+                .alias("k2_mean"),
+                (lit(b1) * col("kl1_rms")
+                    + lit(b2) * col("kl2_rms")
+                    + lit(b3) * col("kl3_rms")
+                    + lit(b4) * col("kl4_rms")
+                    + lit(b5) * col("kl5_rms")
+                    + lit(b6) * col("kl6_rms"))
+                .alias("k2_rms"),
+                col("kl2_std").alias("k2_std"),
+                (lit(c1) * col("kl1")
+                    + lit(c2) * col("kl2")
+                    + lit(c3) * col("kl3")
+                    + lit(c4) * col("kl4")
+                    + lit(c5) * col("kl5")
+                    + lit(c6) * col("kl6"))
+                .alias("k3"),
+                (lit(c1) * col("kl1_mean")
+                    + lit(c2) * col("kl2_mean")
+                    + lit(c3) * col("kl3_mean")
+                    + lit(c4) * col("kl4_mean")
+                    + lit(c5) * col("kl5_mean")
+                    + lit(c6) * col("kl6_mean"))
+                .alias("k3_mean"),
+                (lit(c1) * col("kl1_rms")
+                    + lit(c2) * col("kl2_rms")
+                    + lit(c3) * col("kl3_rms")
+                    + lit(c4) * col("kl4_rms")
+                    + lit(c5) * col("kl5_rms")
+                    + lit(c6) * col("kl6_rms"))
+                .alias("k3_rms"),
+                col("kl3_std").alias("k3_std"),
+                (lit(d1) * col("kl1")
+                    + lit(d2) * col("kl2")
+                    + lit(d3) * col("kl3")
+                    + lit(d4) * col("kl4")
+                    + lit(d5) * col("kl5")
+                    + lit(d6) * col("kl6"))
+                .alias("k4"),
+                (lit(d1) * col("kl1_mean")
+                    + lit(d2) * col("kl2_mean")
+                    + lit(d3) * col("kl3_mean")
+                    + lit(d4) * col("kl4_mean")
+                    + lit(d5) * col("kl5_mean")
+                    + lit(d6) * col("kl6_mean"))
+                .alias("k4_mean"),
+                (lit(d1) * col("kl1_rms")
+                    + lit(d2) * col("kl2_rms")
+                    + lit(d3) * col("kl3_rms")
+                    + lit(d4) * col("kl4_rms")
+                    + lit(d5) * col("kl5_rms")
+                    + lit(d6) * col("kl6_rms"))
+                .alias("k4_rms"),
+                col("kl4_std").alias("k4_std"),
+                (lit(e1) * col("kl1")
+                    + lit(e2) * col("kl2")
+                    + lit(e3) * col("kl3")
+                    + lit(e4) * col("kl4")
+                    + lit(e5) * col("kl5")
+                    + lit(e6) * col("kl6"))
+                .alias("k5"),
+                (lit(e1) * col("kl1_mean")
+                    + lit(e2) * col("kl2_mean")
+                    + lit(e3) * col("kl3_mean")
+                    + lit(e4) * col("kl4_mean")
+                    + lit(e5) * col("kl5_mean")
+                    + lit(e6) * col("kl6_mean"))
+                .alias("k5_mean"),
+                (lit(e1) * col("kl1_rms")
+                    + lit(e2) * col("kl2_rms")
+                    + lit(e3) * col("kl3_rms")
+                    + lit(e4) * col("kl4_rms")
+                    + lit(e5) * col("kl5_rms")
+                    + lit(e6) * col("kl6_rms"))
+                .alias("k5_rms"),
+                col("kl5_std").alias("k5_std"),
+                (lit(f1) * col("kl1")
+                    + lit(f2) * col("kl2")
+                    + lit(f3) * col("kl3")
+                    + lit(f4) * col("kl4")
+                    + lit(f5) * col("kl5")
+                    + lit(f6) * col("kl6"))
+                .alias("k6"),
+                (lit(f1) * col("kl1_mean")
+                    + lit(f2) * col("kl2_mean")
+                    + lit(f3) * col("kl3_mean")
+                    + lit(f4) * col("kl4_mean")
+                    + lit(f5) * col("kl5_mean")
+                    + lit(f6) * col("kl6_mean"))
+                .alias("k6_mean"),
+                (lit(f1) * col("kl1_rms")
+                    + lit(f2) * col("kl2_rms")
+                    + lit(f3) * col("kl3_rms")
+                    + lit(f4) * col("kl4_rms")
+                    + lit(f5) * col("kl5_rms")
+                    + lit(f6) * col("kl6_rms"))
+                .alias("k6_rms"),
+                col("kl6_std").alias("k6_std"),
             ]);
 
         // let mut val: Vec<f32> = vec![];
         // for koef in state.koef.to_owned() {
-        //     let k = koef.split(",").collect::<Vec<&str>>();
+        //     let k = koef.split(",").collect::<Vec1<&str>>();
         //     let a = k[0].parse::<f32>()?;
         //     let b = k[1].parse::<f32>()?;
         //     let c = k[2].parse::<f32>()?;
