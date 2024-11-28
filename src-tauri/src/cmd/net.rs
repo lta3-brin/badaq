@@ -28,15 +28,27 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
                                 if message.contains("EXP") {
                                     state.nama = klien.get_name(message.into());
 
-                                    onevent.send("EXP,".into()).unwrap();
+                                    onevent.send(state.nama.clone()).unwrap();
                                 } else if message.contains("CORR1") {
+                                    if message.contains("SEQ") {
+                                        state.seq = klien.get_name(message.into());
+
+                                        onevent.send(state.seq.clone()).unwrap();
+                                    }
+
                                     match klien.parse_buff(message.trim().to_string()) {
                                         Ok(lf) => state.corr = lf,
                                         Err(err) => onevent
                                             .send(format!("ERROR:{}", err.to_string()))
                                             .unwrap(),
                                     }
+                                } else if message.contains("SEQ") {
+                                    state.seq = klien.get_name(message.into());
+
+                                    onevent.send(state.seq.clone()).unwrap();
                                 } else if message.contains("DSN") {
+                                    let dsn = klien.get_name(message.into());
+
                                     match klien.parse_buff(message.trim().to_string()) {
                                         Ok(lf) => {
                                             let nlf = klien
