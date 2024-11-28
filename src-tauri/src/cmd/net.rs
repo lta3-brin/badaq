@@ -30,17 +30,24 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
 
                                     onevent.send("EXP,".into()).unwrap();
                                 } else if message.contains("CORR1") {
-                                    if let Err(err) = klien.corr_string(
-                                        &mut state,
-                                        message.trim().to_string(),
-                                        false,
-                                    ) {
-                                        onevent.send(format!("ERROR:{}", err.to_string())).unwrap()
+                                    match klien.parse_buff(message.trim().to_string()) {
+                                        Ok(lf) => state.corr = lf,
+                                        Err(err) => onevent
+                                            .send(format!("ERROR:{}", err.to_string()))
+                                            .unwrap(),
                                     }
                                 } else if message.contains("DSN") {
-                                    match klien.dsn_parsing(&mut state, message.trim().to_string())
-                                    {
-                                        Ok(lbl) => onevent.send(lbl).unwrap(),
+                                    match klien.parse_buff(message.trim().to_string()) {
+                                        Ok(lf) => {
+                                            let nlf = klien
+                                                .calc_data(lf, state.corr.clone())
+                                                .unwrap()
+                                                .collect()
+                                                .unwrap();
+
+                                            println!("{}", nlf);
+                                        }
+
                                         Err(err) => onevent
                                             .send(format!("ERROR:{}", err.to_string()))
                                             .unwrap(),
