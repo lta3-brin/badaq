@@ -29,7 +29,7 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
                                     state.nama = klien.get_name(message.into());
 
                                     onevent.send(state.nama.clone()).unwrap();
-                                } else if message.contains("CORR1") {
+                                } else if message.contains("CORR") {
                                     if message.contains("SEQ") {
                                         state.seq = klien.get_name(message.into());
 
@@ -52,7 +52,12 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
                                     match klien.parse_buff(message.trim().to_string()) {
                                         Ok(lf) => {
                                             let nlf = klien
-                                                .calc_data(lf, state.corr.clone())
+                                                .calc_data(
+                                                    lf,
+                                                    state.corr.clone(),
+                                                    state.seq.clone(),
+                                                    dsn,
+                                                )
                                                 .unwrap()
                                                 .collect()
                                                 .unwrap();
