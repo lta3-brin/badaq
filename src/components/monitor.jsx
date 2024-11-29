@@ -40,7 +40,7 @@ export default function DefaultMonitor() {
 
   const configs = {
     responsive: true,
-    scrollZoom: true,
+    scrollZoom: false,
     displayModeBar: false,
     displaylogo: false,
   };
@@ -62,7 +62,7 @@ export default function DefaultMonitor() {
         dialog.showModal();
       } else {
         dialog.close();
-        console.log(msg);
+        console.log(msg.split(","));
       }
     };
 
