@@ -105,13 +105,7 @@ impl TcpKlien {
         Ok(lf)
     }
 
-    pub fn calc_data(
-        &self,
-        lf: LazyFrame,
-        other: LazyFrame,
-        sec: String,
-        dsn: String,
-    ) -> Result<LazyFrame> {
+    pub fn calc_data(&self, lf: LazyFrame, other: LazyFrame) -> Result<LazyFrame> {
         // Per baris
         // Aslinya: wtr.write_record(&["1481.48482578329", "2474.88899479221", "49.1840375906808", "-0.0511660757922492", "-0.115345955315131", "0.00422783876641308"])?;
         let a1 = 1481.48482578329;
@@ -323,8 +317,7 @@ impl TcpKlien {
                     + lit(f6) * col("kl6_rms"))
                 .alias("k6_rms"),
                 col("kl6_std").alias("k6_std"),
-            ])
-            .with_columns(vec![lit(sec).alias("sec"), lit(dsn).alias("dsn")]);
+            ]);
 
         Ok(nlf)
     }
