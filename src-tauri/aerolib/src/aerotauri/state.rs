@@ -1,8 +1,9 @@
-#[derive(Debug, Default)]
+use polars::prelude::LazyFrame;
+
+#[derive(Default)]
 pub struct AppState {
-    pub nama: String,
-    pub koreksi: Vec<f32>,
     pub seq: String,
-    pub koleksi: Vec<String>,
-    pub koef: Vec<String>,
+    pub nama: String,
+    pub corr: LazyFrame,
+    pub coef_calib: LazyFrame,
 }

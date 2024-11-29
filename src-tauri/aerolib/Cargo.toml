@@ -6,10 +6,23 @@ edition = "2021"
 [dependencies]
 log = "0.4.22"
 anyhow = "1.0.93"
+csv = { version = "1", features = [], optional = true }
 tauri = { version = "2", features = [], optional = true }
 dotenv = { version = "0.15.0", features = [], optional = true }
 tauri-plugin-shell = { version = "2", features = [], optional = true }
 tokio = { version = "1.41.1", features = ["full"], optional = true }
+polars = { version = "0.44", features = [
+    "lazy",
+    "csv",
+    "describe",
+], optional = true }
 
 [features]
-aerotauri = ["dep:tauri", "dep:tauri-plugin-shell", "dep:dotenv", "dep:tokio"]
+aerotauri = [
+    "dep:csv",
+    "dep:tauri",
+    "dep:tokio",
+    "dep:dotenv",
+    "dep:polars",
+    "dep:tauri-plugin-shell",
+]
