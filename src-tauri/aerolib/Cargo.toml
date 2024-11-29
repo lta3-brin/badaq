@@ -19,10 +19,10 @@ polars = { version = "0.44", features = [
 
 [features]
 aerotauri = [
-    "dep:tauri",
-    "dep:tauri-plugin-shell",
-    "dep:dotenv",
-    "dep:tokio",
     "dep:csv",
+    "dep:tauri",
+    "dep:tokio",
+    "dep:dotenv",
     "dep:polars",
+    "dep:tauri-plugin-shell",
 ]
