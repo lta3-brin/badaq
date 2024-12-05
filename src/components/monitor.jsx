@@ -1,5 +1,4 @@
 import {
-  createEffect,
   createResource,
   createSignal,
   onMount,
@@ -12,20 +11,11 @@ import Plotly from "plotly.js-dist-min";
 import DefaultCard from "./card";
 import { AppContext } from "../stores";
 import { SimpleDialog } from "./dialog";
-import { createStore, produce } from "solid-js/store";
 
 export default function DefaultMonitor() {
   let refSimpleDialog;
   const [message, setMessage] = createSignal();
   const { state, setState } = useContext(AppContext);
-  const [store, setStore] = createStore({
-    data1: [],
-    data2: [],
-    data3: [],
-    data4: [],
-    data5: [],
-    data6: [],
-  });
 
   const layout = {
     responsive: true,
@@ -77,7 +67,7 @@ export default function DefaultMonitor() {
           const payload = msg.split(",");
 
           if (payload.length === 1 && !msg.includes("ENDSEQ")) {
-            setStore("data1", store.data1.length, {
+            Plotly.addTraces(state.k1, {
               unik: `k1_${payload[0]}`,
               type: "scatter",
               mode: "lines",
@@ -91,7 +81,7 @@ export default function DefaultMonitor() {
               },
             });
 
-            setStore("data2", store.data2.length, {
+            Plotly.addTraces(state.k2, {
               unik: `k2_${payload[0]}`,
               type: "scatter",
               mode: "lines",
@@ -105,7 +95,7 @@ export default function DefaultMonitor() {
               },
             });
 
-            setStore("data3", store.data3.length, {
+            Plotly.addTraces(state.k3, {
               unik: `k3_${payload[0]}`,
               type: "scatter",
               mode: "lines",
@@ -119,7 +109,7 @@ export default function DefaultMonitor() {
               },
             });
 
-            setStore("data4", store.data4.length, {
+            Plotly.addTraces(state.k4, {
               unik: `k4_${payload[0]}`,
               type: "scatter",
               mode: "lines",
@@ -133,7 +123,7 @@ export default function DefaultMonitor() {
               },
             });
 
-            setStore("data5", store.data5.length, {
+            Plotly.addTraces(state.k5, {
               unik: `k5_${payload[0]}`,
               type: "scatter",
               mode: "lines",
@@ -147,7 +137,7 @@ export default function DefaultMonitor() {
               },
             });
 
-            setStore("data6", store.data6.length, {
+            Plotly.addTraces(state.k6, {
               unik: `k6_${payload[0]}`,
               type: "scatter",
               mode: "lines",
@@ -161,89 +151,53 @@ export default function DefaultMonitor() {
               },
             });
           } else {
-            setStore(
-              "data1",
-              (el) => el.unik === `k1_${payload[0]}`,
-              produce((el) => {
-                const x = parseInt(payload[1].split("-")[1]);
-                const y = parseFloat(payload[3]);
-                const y_std = parseFloat(payload[5]);
+            Plotly.extendTraces(state.k1, {
+              x: [[parseInt(payload[1].split("-")[1])]],
+              y: [[parseFloat(payload[3])]],
+              "error_y.array": [[parseFloat(payload[5])]],
+            }, [
+              state.k1.data.findIndex((el) => el.unik === `k1_${payload[0]}`),
+            ]);
 
-                el.x.push(x);
-                el.y.push(y);
-                el.error_y.array.push(y_std);
-              }),
-            );
+            Plotly.extendTraces(state.k2, {
+              x: [[parseInt(payload[1].split("-")[1])]],
+              y: [[parseFloat(payload[7])]],
+              "error_y.array": [[parseFloat(payload[9])]],
+            }, [
+              state.k2.data.findIndex((el) => el.unik === `k2_${payload[0]}`),
+            ]);
 
-            setStore(
-              "data2",
-              (el) => el.unik === `k2_${payload[0]}`,
-              produce((el) => {
-                const x = parseInt(payload[1].split("-")[1]);
-                const y = parseFloat(payload[7]);
-                const y_std = parseFloat(payload[9]);
+            Plotly.extendTraces(state.k3, {
+              x: [[parseInt(payload[1].split("-")[1])]],
+              y: [[parseFloat(payload[11])]],
+              "error_y.array": [[parseFloat(payload[13])]],
+            }, [
+              state.k3.data.findIndex((el) => el.unik === `k3_${payload[0]}`),
+            ]);
 
-                el.x.push(x);
-                el.y.push(y);
-                el.error_y.array.push(y_std);
-              }),
-            );
+            Plotly.extendTraces(state.k4, {
+              x: [[parseInt(payload[1].split("-")[1])]],
+              y: [[parseFloat(payload[15])]],
+              "error_y.array": [[parseFloat(payload[17])]],
+            }, [
+              state.k4.data.findIndex((el) => el.unik === `k4_${payload[0]}`),
+            ]);
 
-            setStore(
-              "data3",
-              (el) => el.unik === `k3_${payload[0]}`,
-              produce((el) => {
-                const x = parseInt(payload[1].split("-")[1]);
-                const y = parseFloat(payload[11]);
-                const y_std = parseFloat(payload[13]);
+            Plotly.extendTraces(state.k5, {
+              x: [[parseInt(payload[1].split("-")[1])]],
+              y: [[parseFloat(payload[19])]],
+              "error_y.array": [[parseFloat(payload[21])]],
+            }, [
+              state.k5.data.findIndex((el) => el.unik === `k5_${payload[0]}`),
+            ]);
 
-                el.x.push(x);
-                el.y.push(y);
-                el.error_y.array.push(y_std);
-              }),
-            );
-
-            setStore(
-              "data4",
-              (el) => el.unik === `k4_${payload[0]}`,
-              produce((el) => {
-                const x = parseInt(payload[1].split("-")[1]);
-                const y = parseFloat(payload[15]);
-                const y_std = parseFloat(payload[17]);
-
-                el.x.push(x);
-                el.y.push(y);
-                el.error_y.array.push(y_std);
-              }),
-            );
-
-            setStore(
-              "data5",
-              (el) => el.unik === `k5_${payload[0]}`,
-              produce((el) => {
-                const x = parseInt(payload[1].split("-")[1]);
-                const y = parseFloat(payload[19]);
-                const y_std = parseFloat(payload[21]);
-
-                el.x.push(x);
-                el.y.push(y);
-                el.error_y.array.push(y_std);
-              }),
-            );
-
-            setStore(
-              "data6",
-              (el) => el.unik === `k6_${payload[0]}`,
-              produce((el) => {
-                const x = parseInt(payload[1].split("-")[1]);
-                const y = parseFloat(payload[23]);
-                const y_std = parseFloat(payload[25]);
-
-                el.x.push(x);
-                el.y.push(y);
-                el.error_y.array.push(y_std);
-              }),
-            );
+            Plotly.extendTraces(state.k6, {
+              x: [[parseInt(payload[1].split("-")[1])]],
+              y: [[parseFloat(payload[23])]],
+              "error_y.array": [[parseFloat(payload[25])]],
+            }, [
+              state.k6.data.findIndex((el) => el.unik === `k6_${payload[0]}`),
+            ]);
           }
         }
       }
@@ -261,15 +215,13 @@ export default function DefaultMonitor() {
     refSimpleDialog.addEventListener("click", () => {
       refetch();
     });
-  });
 
-  createEffect(async () => {
-    Plotly.newPlot(state.k1, store.data1, layout, configs);
-    Plotly.newPlot(state.k2, store.data2, layout, configs);
-    Plotly.newPlot(state.k3, store.data3, layout, configs);
-    Plotly.newPlot(state.k4, store.data4, layout, configs);
-    Plotly.newPlot(state.k5, store.data5, layout, configs);
-    Plotly.newPlot(state.k6, store.data6, layout, configs);
+    Plotly.newPlot(state.k1, [], layout, configs);
+    Plotly.newPlot(state.k2, [], layout, configs);
+    Plotly.newPlot(state.k3, [], layout, configs);
+    Plotly.newPlot(state.k4, [], layout, configs);
+    Plotly.newPlot(state.k5, [], layout, configs);
+    Plotly.newPlot(state.k6, [], layout, configs);
   });
 
   return (
