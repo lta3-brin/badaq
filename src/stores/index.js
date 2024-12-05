@@ -10,5 +10,5 @@ export const [state, setState] = createStore({
     k3: null,
     k4: null,
     k5: null,
-    k6: null,
+    k6: null
 });
