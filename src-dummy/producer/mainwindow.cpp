@@ -91,33 +91,8 @@ void MainWindow::on_Btn_Stream_clicked()
                 Phase=1;
                 ui->Btn_Stream->setText("Stream CORR1");
                 break;
+
             case 1: //..............................................CORR1
-                idStart=idLine;
-
-                for(int i=0;i<109;i++)
-                {
-                    DataString=DataString + List[i+idStart] + "\n";
-                    idLine=idLine+1;
-                }
-
-                Phase=3;
-                ui->Btn_Stream->setText("Stream DSN");
-                break;
-            case 2: //..............................................START OR END OF SEQUENCE OF DATA
-                DataString=List[idLine] + "\n";
-                idLine=idLine+1;
-                if(Seq==1)
-                {
-                    Phase=3;
-                    ui->Btn_Stream->setText("Stream DSN");
-                }
-                else
-                {
-                    Phase=4;
-                    ui->Btn_Stream->setText("Stream CORR2");
-                }
-                break;
-            case 3: //..............................................DATA SEQUENCE
                 idStart=idLine;
 
                 for(int i=0;i<108;i++)
@@ -126,24 +101,74 @@ void MainWindow::on_Btn_Stream_clicked()
                     idLine=idLine+1;
                 }
 
+                Phase=3;
+                Seq=1;
+                ui->Btn_Stream->setText("Stream DSN");
+                ui->statusbar->showMessage("Seq " + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine));
+                break;
+
+            case 2: //..............................................START OR END OF SEQUENCE OF DATA
+                DataString=List[idLine] + "\n";
+                idLine=idLine+1;
+                if(Seq==1)
+                {
+                    Phase=3;
+                    ui->Btn_Stream->setText("Stream DSN");
+                }
+                else if(Seq==0)
+                {
+                    Phase=4;
+                    ui->Btn_Stream->setText("Stream CORR2");
+                }
+                break;
+
+            case 3: //..............................................DATA SEQUENCE
+                idStart=idLine;
+
+                if(Seq==1)
+                {
+                    for(int i=0;i<109;i++)
+                    {
+                        DataString=DataString + List[i+idStart] + "\n";
+                        idLine=idLine+1;
+                    }
+                    Seq=2;
+                    ui->statusbar->showMessage("Di sini Seq=" + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine));
+                }
+                else if(Seq==2)
+                {
+                    for(int i=0;i<108;i++)
+                    {
+                        DataString=DataString + List[i+idStart] + "\n";
+                        idLine=idLine+1;
+                    }
+                    ui->statusbar->showMessage("Seq " + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine) + " Next DSN");
+                }
+
+
                 if(List[idLine].left(3)=="END")//..........................Check end of DATA SEQUENCE
                 {
                     if(List[idLine+1].left(3)=="SEQ")
                     {
                         Phase=2; //........................................START of another SEQUENCE OF DATA
                         Seq=1;
+                        ui->statusbar->showMessage("Awal Seq " + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine));
                     }
                     else
                     {
                         Phase=2; //........................................Move to CORR2
                         Seq=0;
+                        ui->statusbar->showMessage("Akhir Seq " + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine));
                     }
                     ui->Btn_Stream->setText("Stream ENDSEQ");
 
                 }
-                else Phase=3; //...........................................Next data sequence
+                else
+                    Phase=3; //...........................................Next data sequence
+
 
                 break;
+
             case 4: //..............................................CORR2
                 idStart=idLine;
 
@@ -155,6 +180,7 @@ void MainWindow::on_Btn_Stream_clicked()
 
                 Phase=5;
                 ui->Btn_Stream->setText("Stream ENDRUN");
+                ui->statusbar->showMessage("Corr2 Seq " + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine));
                 break;
             case 5: //..............................................END OF RUN
                 DataString=List[idLine];
@@ -163,6 +189,7 @@ void MainWindow::on_Btn_Stream_clicked()
                 Seq=1;
                 ui->Btn_Stream->setText("Stream PRESQ");
                 ui->Btn_Stream->setEnabled(false);
+                ui->statusbar->showMessage("End Run Seq " + QString::number(Seq) + ", Phase=" + QString::number(Phase) + ", IdLine=" + QString::number(idLine));
                 break;
             }
 
