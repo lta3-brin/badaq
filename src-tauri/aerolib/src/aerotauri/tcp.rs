@@ -54,7 +54,7 @@ impl TcpKlien {
         let csv_parsing = CsvParseOptions::default().with_truncate_ragged_lines(true);
         let lf = CsvReadOptions::default()
             .with_parse_options(csv_parsing)
-            .with_skip_rows(6)
+            .with_skip_rows(7)
             .with_n_rows(Some(34))
             .with_ignore_errors(true)
             .with_has_header(false)
