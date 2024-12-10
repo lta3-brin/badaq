@@ -27,23 +27,27 @@ impl TcpKlien {
             if line.contains("EXP") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
+                f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()));
             } else if line.contains("RUN") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("-RUN{}", ln[1].trim()))
+                f.push_str(&format!("-RUN{}", ln[1].trim()));
             } else if line.contains("SEQ") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()))
+                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()));
             } else if line.contains("DSN") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()))
+                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()));
             }
         }
 
-        f
+        if f.contains("SEQ") && f.contains("DSN") {
+            f.replace("DSN-001", "")
+        } else {
+            f
+        }
     }
 
     pub fn parse_buff(&self, lines: String) -> Result<LazyFrame> {
