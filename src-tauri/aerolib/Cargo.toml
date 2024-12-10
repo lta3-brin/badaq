@@ -11,7 +11,7 @@ tauri = { version = "2", features = [], optional = true }
 dotenv = { version = "0.15.0", features = [], optional = true }
 tauri-plugin-shell = { version = "2", features = [], optional = true }
 tokio = { version = "1.41.1", features = ["full"], optional = true }
-polars = { version = "0.44", features = [
+polars = { version = "0.45.1", features = [
     "lazy",
     "csv",
     "describe",
