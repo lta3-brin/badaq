@@ -39,11 +39,13 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
                                 } else if message.contains("DSN") {
                                     if message.contains("SEQ") {
                                         state.seq = klien.get_name(message.into());
+                                        state.dsn = String::from("DSN-001");
 
                                         onevent.send(state.seq.clone()).unwrap();
+                                    } else {
+                                        let dsn = klien.get_name(message.into());
+                                        state.dsn = dsn;
                                     }
-
-                                    let dsn = klien.get_name(message.into());
 
                                     match klien.parse_buff(message.trim().to_string()) {
                                         Ok(lf) => {
@@ -54,7 +56,7 @@ pub async fn try_connect(app: AppHandle, addr: String, onevent: tauri::ipc::Chan
                                                 .unwrap();
 
                                             let mut payload =
-                                                format!("{},{},", state.seq.clone(), dsn);
+                                                format!("{},{},", state.seq.clone(), state.dsn);
                                             let koloms = vec![
                                                 "k1", "k1_mean", "k1_rms", "k1_std", "k2",
                                                 "k2_mean", "k2_rms", "k2_std", "k3", "k3_mean",
