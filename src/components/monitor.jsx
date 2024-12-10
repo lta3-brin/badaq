@@ -66,7 +66,7 @@ export default function DefaultMonitor() {
         if (msg.includes("SEQ")) {
           const payload = msg.split(",");
 
-          if (payload.length === 1 && !msg.includes("ENDSEQ")) {
+          if (payload.length === 1 || msg.includes("ENDSEQ")) {
             Plotly.addTraces(state.k1, {
               unik: `k1_${payload[0]}`,
               type: "scatter",
