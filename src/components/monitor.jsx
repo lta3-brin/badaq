@@ -35,6 +35,7 @@ export default function DefaultMonitor() {
     },
     yaxis: {
       zeroline: false,
+      showticklabels: false,
     },
   };
 
