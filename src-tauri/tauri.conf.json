@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "badaq",
+  "productName": "BADAQ Monitor",
   "version": "0.1.0",
   "identifier": "com.badaq.app",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "badaq",
+        "title": "BADAQ Monitor",
         "width": 1920,
         "height": 1080
       }
