@@ -8,7 +8,6 @@ export default function DefaultNavbar() {
   const { state, setState } = useContext(AppContext);
 
   createEffect(() => {
-    console.log(state.isDark);
     if (state.k1.data) {
       let layout;
 
@@ -42,7 +41,7 @@ export default function DefaultNavbar() {
   return (
     <div class="navbar bg-primary text-primary-content shadow-sm">
       <div class="flex-1">
-        <span class="pl-2 text-xl">Monitor</span>
+        <span class="pl-2 text-xl">Dashboard</span>
       </div>
       <div class="flex-none space-x-2">
         <div
