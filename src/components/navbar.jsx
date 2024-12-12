@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-dist-min";
-import { X, Save, ChevronDown } from "lucide-solid";
+import { ChevronDown, Save, X } from "lucide-solid";
 import { createEffect, useContext } from "solid-js";
 
 import { AppContext } from "../stores";
@@ -8,6 +8,7 @@ export default function DefaultNavbar() {
   const { state, setState } = useContext(AppContext);
 
   createEffect(() => {
+    console.log(state.isDark);
     if (state.k1.data) {
       let layout;
 
@@ -76,7 +77,7 @@ export default function DefaultNavbar() {
                   class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                   aria-label="Light"
                   value="default"
-                  onChange={() => setState("isDark", !state.isDark)}
+                  onChange={() => setState("isDark", false)}
                 />
               </li>
               <li>
@@ -86,7 +87,7 @@ export default function DefaultNavbar() {
                   class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                   aria-label="Dark"
                   value="business"
-                  onChange={() => setState("isDark", !state.isDark)}
+                  onChange={() => setState("isDark", true)}
                 />
               </li>
             </ul>
