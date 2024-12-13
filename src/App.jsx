@@ -1,4 +1,5 @@
 import { lazy } from "solid-js";
+
 import "./styles/index.css";
 
 export default function App() {
