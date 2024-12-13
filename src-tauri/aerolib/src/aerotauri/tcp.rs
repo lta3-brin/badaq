@@ -27,30 +27,34 @@ impl TcpKlien {
             if line.contains("EXP") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()))
+                f.push_str(&format!("{}-{}", ln[1].trim(), ln[2].trim()));
             } else if line.contains("RUN") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("-RUN{}", ln[1].trim()))
+                f.push_str(&format!("-RUN{}", ln[1].trim()));
             } else if line.contains("SEQ") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()))
+                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()));
             } else if line.contains("DSN") {
                 ln = line.split(",").collect::<Vec<&str>>();
 
-                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()))
+                f.push_str(&format!("{}-{}", ln[0].trim(), ln[1].trim()));
             }
         }
 
-        f
+        if f.contains("SEQ") && f.contains("DSN") {
+            f.replace("DSN-001", "")
+        } else {
+            f
+        }
     }
 
     pub fn parse_buff(&self, lines: String) -> Result<LazyFrame> {
         let csv_parsing = CsvParseOptions::default().with_truncate_ragged_lines(true);
         let lf = CsvReadOptions::default()
             .with_parse_options(csv_parsing)
-            .with_skip_rows(6)
+            .with_skip_rows(7)
             .with_n_rows(Some(34))
             .with_ignore_errors(true)
             .with_has_header(false)

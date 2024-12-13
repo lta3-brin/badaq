@@ -1,17 +1,31 @@
 import Plotly from "plotly.js-dist-min";
-import { X, Save, ChevronDown } from "lucide-solid";
-import { createEffect, useContext } from "solid-js";
+import { load } from "@tauri-apps/plugin-store";
+import { ChevronDown, Save, X } from "lucide-solid";
+import { createEffect, createResource, useContext } from "solid-js";
 
 import { AppContext } from "../stores";
 
 export default function DefaultNavbar() {
-  const { state, setState } = useContext(AppContext);
+  const { state } = useContext(AppContext);
 
-  createEffect(() => {
+  const fetchLocalStorage = async () => {
+    const tema = await state.storage.get("temagelap");
+
+    if (!tema) {
+      state.storage.set("temagelap", false);
+    }
+
+    return tema;
+  };
+
+  const [temagelap, { mutate }] = createResource(fetchLocalStorage);
+
+  createEffect(async () => {
+    // console.log("Status:", temagelap.latest);
     if (state.k1.data) {
       let layout;
 
-      if (state.isDark) {
+      if (temagelap.latest) {
         layout = {
           paper_bgcolor: "#2a303c",
           plot_bgcolor: "#2a303c",
@@ -41,7 +55,7 @@ export default function DefaultNavbar() {
   return (
     <div class="navbar bg-primary text-primary-content shadow-sm">
       <div class="flex-1">
-        <span class="pl-2 text-xl">Monitor</span>
+        <span class="pl-2 text-xl">Dashboard</span>
       </div>
       <div class="flex-none space-x-2">
         <div
@@ -76,7 +90,13 @@ export default function DefaultNavbar() {
                   class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                   aria-label="Light"
                   value="default"
-                  onChange={() => setState("isDark", !state.isDark)}
+                  checked={temagelap()}
+                  onChange={() => {
+                    const gelap = false;
+
+                    mutate(gelap);
+                    state.storage.set("temagelap", gelap);
+                  }}
                 />
               </li>
               <li>
@@ -86,7 +106,13 @@ export default function DefaultNavbar() {
                   class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                   aria-label="Dark"
                   value="business"
-                  onChange={() => setState("isDark", !state.isDark)}
+                  checked={temagelap()}
+                  onChange={() => {
+                    const gelap = true;
+
+                    mutate(gelap);
+                    state.storage.set("temagelap", gelap);
+                  }}
                 />
               </li>
             </ul>

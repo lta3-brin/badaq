@@ -26,3 +26,4 @@ tauri-plugin-shell = "2"
 tauri-plugin-dialog = "2"
 tauri = { version = "2", features = [] }
 aerolib = { path = "aerolib", features = ["aerotauri"] }
+tauri-plugin-store = "2"
