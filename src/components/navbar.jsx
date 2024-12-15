@@ -1,6 +1,7 @@
 import Plotly from "plotly.js-dist-min";
 import { save } from "@tauri-apps/plugin-dialog";
 import { ChevronDown, Save, X } from "lucide-solid";
+import { BaseDirectory, create } from "@tauri-apps/plugin-fs";
 import { createEffect, createResource, useContext } from "solid-js";
 
 import { AppContext } from "../stores";
@@ -61,7 +62,10 @@ export default function DefaultNavbar() {
       ],
     });
 
-    console.log(path);
+    const file = await create(path, { baseDir: BaseDirectory.App });
+
+    await file.write(new TextEncoder().encode("Hello world"));
+    await file.close();
   };
 
   return (
