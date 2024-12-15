@@ -21,7 +21,6 @@ export default function DefaultNavbar() {
   const [temagelap, { mutate }] = createResource(fetchLocalStorage);
 
   createEffect(async () => {
-    // console.log("Status:", temagelap.latest);
     if (state.k1.data) {
       let layout;
 
