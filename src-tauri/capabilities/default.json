@@ -29,6 +29,7 @@
     },
     "log:default",
     "dialog:default",
-    "store:default"
+    "store:default",
+    "fs:write-files"
   ]
 }
