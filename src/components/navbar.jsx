@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-dist-min";
-import { load } from "@tauri-apps/plugin-store";
+import { save } from "@tauri-apps/plugin-dialog";
 import { ChevronDown, Save, X } from "lucide-solid";
 import { createEffect, createResource, useContext } from "solid-js";
 
@@ -50,6 +50,19 @@ export default function DefaultNavbar() {
       Plotly.relayout(state.k6, layout);
     }
   });
+
+  const onBtnSave = async () => {
+    const path = await save({
+      filters: [
+        {
+          name: "Plot",
+          extensions: [".csv", ".txt"],
+        },
+      ],
+    });
+
+    console.log(path);
+  };
 
   return (
     <div class="navbar bg-primary text-primary-content shadow-sm">
@@ -122,7 +135,10 @@ export default function DefaultNavbar() {
           class="tooltip tooltip-left tooltip-secondary"
           data-tip="Save data"
         >
-          <button class="btn btn-square btn-ghost hover:text-secondary">
+          <button
+            class="btn btn-square btn-ghost hover:text-secondary"
+            onClick={onBtnSave}
+          >
             <Save size={28} />
           </button>
         </div>
