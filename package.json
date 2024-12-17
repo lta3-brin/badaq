@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@tauri-apps/plugin-dialog": "^2.0.2",
+    "@tauri-apps/plugin-fs": "~2.2.0",
     "@tauri-apps/plugin-store": "~2.2.0",
     "lucide-solid": "^0.468.0",
     "plotly.js-dist-min": "^2.35.2",
