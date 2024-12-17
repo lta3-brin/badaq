@@ -52,6 +52,29 @@ export default function DefaultNavbar() {
     }
   });
 
+  const jsonToCsv = (data) => {
+    let csv = "";
+    let arr = [];
+
+    const headers = Object.keys(data);
+    csv += headers.join(",") + "\n";
+
+    headers.forEach((header) => {
+      arr.push(data[header]);
+    });
+
+    let newArr = arr.reduce(
+      (prev, next) => next.map((item, i) => (prev[i] || []).concat(next[i])),
+      [],
+    );
+
+    newArr.forEach((val) => {
+      csv += val.join(",") + "\n";
+    });
+
+    return csv;
+  };
+
   const onBtnSave = async () => {
     const path = await save({
       filters: [
@@ -64,7 +87,45 @@ export default function DefaultNavbar() {
 
     const file = await create(path, { baseDir: BaseDirectory.App });
 
-    await file.write(new TextEncoder().encode("Hello world"));
+    const tmp = {};
+    state.k1.data.forEach((obj) => {
+      if (obj.name !== "ENDSEQ") {
+        tmp["dsn"] = obj.x;
+        tmp[`Fx_${obj.name}`] = obj.y;
+      }
+    });
+
+    state.k2.data.forEach((obj) => {
+      if (obj.name !== "ENDSEQ") {
+        tmp[`Fy_${obj.name}`] = obj.y;
+      }
+    });
+
+    state.k3.data.forEach((obj) => {
+      if (obj.name !== "ENDSEQ") {
+        tmp[`Fz_${obj.name}`] = obj.y;
+      }
+    });
+
+    state.k4.data.forEach((obj) => {
+      if (obj.name !== "ENDSEQ") {
+        tmp[`Mx_${obj.name}`] = obj.y;
+      }
+    });
+
+    state.k5.data.forEach((obj) => {
+      if (obj.name !== "ENDSEQ") {
+        tmp[`My_${obj.name}`] = obj.y;
+      }
+    });
+
+    state.k6.data.forEach((obj) => {
+      if (obj.name !== "ENDSEQ") {
+        tmp[`Mz_${obj.name}`] = obj.y;
+      }
+    });
+
+    await file.write(new TextEncoder().encode(jsonToCsv(tmp)));
     await file.close();
   };
 
