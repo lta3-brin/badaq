@@ -2,11 +2,13 @@ import Plotly from "plotly.js-dist-min";
 import { save } from "@tauri-apps/plugin-dialog";
 import { ChevronDown, Save, X } from "lucide-solid";
 import { BaseDirectory, create } from "@tauri-apps/plugin-fs";
-import { createEffect, createResource, useContext } from "solid-js";
+import { createEffect, createResource, onMount, useContext } from "solid-js";
 
 import { AppContext } from "../stores";
+import { ConfirmationDialog } from "./dialog";
 
 export default function DefaultNavbar() {
+  let refConfirmationDialog;
   const { state } = useContext(AppContext);
 
   const fetchLocalStorage = async () => {
@@ -20,6 +22,12 @@ export default function DefaultNavbar() {
   };
 
   const [temagelap, { mutate }] = createResource(fetchLocalStorage);
+
+  onMount(() => {
+    refConfirmationDialog.addEventListener("click", () => {
+      onBtnClear();
+    });
+  });
 
   createEffect(async () => {
     if (state.k1.data) {
@@ -64,7 +72,7 @@ export default function DefaultNavbar() {
     });
 
     let newArr = arr.reduce(
-      (prev, next) => next.map((item, i) => (prev[i] || []).concat(next[i])),
+      (prev, next) => next.map((_, i) => (prev[i] || []).concat(next[i])),
       [],
     );
 
@@ -79,7 +87,7 @@ export default function DefaultNavbar() {
     const path = await save({
       filters: [
         {
-          name: "Plot",
+          name: "Filter",
           extensions: [".csv", ".txt"],
         },
       ],
@@ -129,6 +137,17 @@ export default function DefaultNavbar() {
     await file.close();
   };
 
+  const onBtnClear = () => {
+    const indeks = state.k1.data.map((_, idx) => idx);
+
+    Plotly.deleteTraces(state.k1, indeks);
+    Plotly.deleteTraces(state.k2, indeks);
+    Plotly.deleteTraces(state.k3, indeks);
+    Plotly.deleteTraces(state.k4, indeks);
+    Plotly.deleteTraces(state.k5, indeks);
+    Plotly.deleteTraces(state.k6, indeks);
+  };
+
   return (
     <div class="navbar bg-primary text-primary-content shadow-sm">
       <div class="flex-1">
@@ -139,7 +158,10 @@ export default function DefaultNavbar() {
           class="tooltip tooltip-left tooltip-secondary"
           data-tip="Clear plots"
         >
-          <button class="btn btn-square btn-ghost hover:text-secondary">
+          <button
+            class="btn btn-square btn-ghost hover:text-secondary"
+            onclick="confirmation_dialog.showModal()"
+          >
             <X size={28} />
           </button>
         </div>
@@ -208,6 +230,17 @@ export default function DefaultNavbar() {
           </button>
         </div>
       </div>
+
+      <ConfirmationDialog
+        title="Need your attention"
+        ref={refConfirmationDialog}
+      >
+        <p class="py-4">
+          Are you sure you want to proceed? Press
+          <kbd class="kbd kbd-sm">ESC</kbd>
+          to cancel.
+        </p>
+      </ConfirmationDialog>
     </div>
   );
 }
