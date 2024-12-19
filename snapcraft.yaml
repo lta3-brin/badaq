@@ -1,5 +1,5 @@
 name: badaqmon
-base: core24
+base: core22
 version: "2.0.0"
 summary: DAQ for external balance # 79 char long summary
 description: |
@@ -15,7 +15,7 @@ layout:
 apps:
   badaqmon:
     command: usr/bin/badaqmon
-    desktop: usr/share/applications/'BADAQ Monitor.desktop'
+    desktop: usr/share/applications/badaqmon.desktop
     extensions: [gnome]
     plugs:
       - network
@@ -57,4 +57,5 @@ parts:
       npm run tauri build -- --bundles deb
       dpkg -x src-tauri/target/release/bundle/deb/*.deb $SNAPCRAFT_PART_INSTALL/
       ls $SNAPCRAFT_PART_INSTALL/usr/share/applications/
-      sed -i -e "s|Icon=badaqmon|Icon=/usr/share/icons/hicolor/32x32/apps/badaqmon.png|g" $SNAPCRAFT_PART_INSTALL/usr/share/applications/'BADAQ Monitor.desktop'
+      ls $SNAPCRAFT_PART_INSTALL/usr/share/icons/hicolor/32x32/apps/
+      sed -i -e "s|Icon=badaqmon|Icon=/usr/share/icons/hicolor/32x32/apps/badaqmon.png|g" $SNAPCRAFT_PART_INSTALL/usr/share/applications/badaqmon.desktop
