@@ -287,8 +287,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "badaq"
-version = "0.1.0"
+name = "badaqmon"
+version = "2.0.0"
 dependencies = [
  "aerolib",
  "anyhow",

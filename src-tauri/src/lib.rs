@@ -18,9 +18,8 @@ pub fn run() {
             tauri_plugin_log::Builder::new()
                 .targets([
                     tauri_plugin_log::Target::new(tauri_plugin_log::TargetKind::Stdout),
-                    tauri_plugin_log::Target::new(tauri_plugin_log::TargetKind::Folder {
-                        path: std::path::PathBuf::from("./logs"),
-                        file_name: None,
+                    tauri_plugin_log::Target::new(tauri_plugin_log::TargetKind::LogDir {
+                        file_name: Some("logs".to_string()),
                     }),
                 ])
                 .max_file_size(100_000 /* bytes */)

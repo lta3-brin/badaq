@@ -6,6 +6,7 @@ dist
 *.local
 *.user
 *.user.*
+*.snap
 
 /target/
 /logs/
