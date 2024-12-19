@@ -1,5 +1,5 @@
 [package]
-name = "badaq"
+name = "badaqmon"
 version = "0.1.0"
 description = "BADAQ App"
 authors = ["you"]
